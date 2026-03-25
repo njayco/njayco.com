@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useGetArtists, useGetAlbums } from '@/hooks/use-music-hooks'; // We will create a local hook wrapper to prevent import errors if backend fails
+import { useGetArtists, useGetAlbums } from '@/hooks/use-music-hooks';
 import * as Icons from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 

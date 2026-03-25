@@ -3,6 +3,7 @@ import * as Icons from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { useGetDivisions } from '@/hooks/use-music-hooks';
 
 interface PinnedApp {
   id: string;
@@ -19,6 +20,16 @@ const pinnedApps: PinnedApp[] = [
   { id: 'company-info', name: 'About NJAYCO', icon: Icons.Building, type: 'company' },
 ];
 
+const allPrograms: { id: string; name: string; icon: React.ComponentType<{ className?: string }>; type: WindowType; data?: Record<string, unknown> }[] = [
+  { id: 'explorer', name: 'File Explorer', icon: Icons.FolderOpen, type: 'explorer' },
+  { id: 'browser-ie', name: 'Internet Explorer', icon: Icons.Globe, type: 'browser', data: { url: 'https://njayco.com' } },
+  { id: 'notepad-new', name: 'Notepad', icon: Icons.FileText, type: 'notepad' },
+  { id: 'music-uv-2', name: 'UV Music Group', icon: Icons.Music, type: 'music' },
+  { id: 'admin-cp', name: 'Control Panel', icon: Icons.Settings, type: 'admin' },
+  { id: 'company-about', name: 'About NJAYCO', icon: Icons.Building, type: 'company' },
+  { id: 'company-contact', name: 'Contact', icon: Icons.Mail, type: 'custom' },
+];
+
 interface StartMenuProps {
   onShowRun: () => void;
   onShowShutdown: () => void;
@@ -26,6 +37,8 @@ interface StartMenuProps {
 
 export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
   const { user, setUser, setStartMenuOpen, openWindow, closeAllWindows } = useDesktopStore();
+  const { data: divisions } = useGetDivisions();
+  const [showAllPrograms, setShowAllPrograms] = useState(false);
 
   const handleAppClick = (app: PinnedApp) => {
     openWindow({
@@ -63,6 +76,44 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
         </div>
       </div>
 
+      {showAllPrograms ? (
+        <div className="flex-1 flex flex-col bg-white" style={{ height: 'min(420px, calc(100vh - 200px))' }}>
+          <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border-b border-blue-100">
+            <button onClick={() => setShowAllPrograms(false)} className="p-1 hover:bg-blue-100 rounded">
+              <Icons.ArrowLeft className="w-4 h-4 text-blue-600" />
+            </button>
+            <span className="text-sm font-bold text-blue-900">All Programs</span>
+          </div>
+          <div className="flex-1 overflow-y-auto flex flex-col">
+            <div className="p-2 border-b border-gray-100">
+              <div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-2 py-1">Applications</div>
+              {allPrograms.map(app => (
+                <button key={app.id} onClick={() => { openWindow({ id: app.id, title: app.name, windowType: app.type, data: app.data }); setStartMenuOpen(false); }}
+                  className="flex items-center gap-3 p-2 w-full hover:bg-primary hover:text-white rounded transition-colors group text-left">
+                  <app.icon className="w-5 h-5 text-primary group-hover:text-white shrink-0" />
+                  <span className="text-sm text-gray-800 group-hover:text-white">{app.name}</span>
+                </button>
+              ))}
+            </div>
+            {divisions && divisions.length > 0 && (
+              <div className="p-2">
+                <div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-2 py-1">Divisions</div>
+                {divisions.map(div => (
+                  <button key={div.id} onClick={() => { openWindow({ id: `div-${div.id}`, title: div.name, windowType: (div.windowType as WindowType) || 'custom', data: { url: div.websiteUrl, content: div.notepadContent, division: div } }); setStartMenuOpen(false); }}
+                    className="flex items-center gap-3 p-2 w-full hover:bg-primary hover:text-white rounded transition-colors group text-left">
+                    <Icons.Building2 className="w-4 h-4 text-primary group-hover:text-white shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-gray-800 group-hover:text-white truncate">{div.name}</div>
+                      <div className="text-[10px] text-gray-400 group-hover:text-white/70 capitalize">{div.category}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+      <>
       {/* Body */}
       <div className="flex bg-white" style={{ height: 'min(420px, calc(100vh - 200px))' }}>
         {/* Left Panel */}
@@ -79,7 +130,7 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
           ))}
           
           <div className="mt-auto pt-2 border-t border-gray-100">
-            <button className="flex items-center justify-between w-full p-2 hover:bg-primary hover:text-white rounded transition-colors group">
+            <button onClick={() => setShowAllPrograms(true)} className="flex items-center justify-between w-full p-2 hover:bg-primary hover:text-white rounded transition-colors group">
               <span className="text-sm font-bold text-gray-700 group-hover:text-white">All Programs</span>
               <Icons.ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-white" />
             </button>
@@ -160,6 +211,8 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
           <span className="text-sm text-white font-medium">Shut Down</span>
         </button>
       </div>
+      </>
+      )}
     </div>
   );
 }
