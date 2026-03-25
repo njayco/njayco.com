@@ -54,8 +54,11 @@ export function useGetAdminStats() {
 
 export function useUpdateDivision() {
   const queryClient = useQueryClient();
+  const adminToken = import.meta.env.VITE_ADMIN_TOKEN as string | undefined;
   return useMutation<Division, Error, DivisionUpdate>({
-    mutationFn: (data: DivisionUpdate) => updateDivision(data),
+    mutationFn: (data: DivisionUpdate) => updateDivision(data, {
+      headers: adminToken ? { 'x-admin-token': adminToken } : {},
+    }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/divisions'] });
     }

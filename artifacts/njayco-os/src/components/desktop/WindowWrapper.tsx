@@ -10,7 +10,7 @@ import { AdminApp } from '../apps/AdminApp';
 import { CompanyInfoApp } from '../apps/CompanyInfoApp';
 
 export function WindowWrapper({ window: win }: { window: WindowState }) {
-  const { focusWindow, closeWindow, minimizeWindow, maximizeWindow, activeWindowId } = useDesktopStore();
+  const { focusWindow, closeWindow, minimizeWindow, maximizeWindow, activeWindowId, user } = useDesktopStore();
   const isActive = activeWindowId === win.id;
   
   const [size, setSize] = useState({ width: 800, height: 600 });
@@ -24,7 +24,17 @@ export function WindowWrapper({ window: win }: { window: WindowState }) {
       case 'notepad': return <NotepadApp data={win.data} />;
       case 'music': return <MusicApp />;
       case 'explorer': return <ExplorerApp />;
-      case 'admin': return <AdminApp />;
+      case 'admin':
+        if (user !== 'admin') {
+          return (
+            <div className="flex flex-col items-center justify-center h-full gap-4 bg-white text-slate-700 p-8">
+              <Icons.ShieldOff className="w-12 h-12 text-red-400" />
+              <h3 className="text-lg font-semibold">Access Denied</h3>
+              <p className="text-sm text-slate-500 text-center max-w-xs">The Control Panel requires Administrator access. Please log in as Administrator.</p>
+            </div>
+          );
+        }
+        return <AdminApp />;
       case 'company': return <CompanyInfoApp data={win.data} />;
       case 'custom': return <CompanyInfoApp data={win.data} />;
       default: return <div className="p-4 bg-white h-full">Unknown application type.</div>;

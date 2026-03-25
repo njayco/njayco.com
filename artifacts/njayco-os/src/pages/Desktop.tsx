@@ -7,13 +7,14 @@ import type { WindowType } from '@/store/use-desktop-store';
 import * as Icons from 'lucide-react';
 
 export default function Desktop() {
-  const { windows, closeAllWindows } = useDesktopStore();
+  const { windows, user } = useDesktopStore();
   const { data: divisions, isLoading } = useGetDivisions();
+  const isAdmin = user === 'admin';
 
-  // Static core icons that are always available (not from database)
-  const coreIcons = [
-    { id: 'admin-panel', name: 'Control Panel', iconType: 'Settings', windowType: 'admin' as const },
-  ];
+  // Control Panel only shown to admin users
+  const coreIcons = isAdmin
+    ? [{ id: 'admin-panel', name: 'Control Panel', iconType: 'Settings', windowType: 'admin' as const }]
+    : [];
   
   // IDs of divisions handled by coreIcons already (to avoid duplicates on desktop)
   const hiddenDivisionSlugs = new Set(['my-njayco', 'recycle-bin']);

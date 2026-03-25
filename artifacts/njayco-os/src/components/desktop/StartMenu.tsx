@@ -20,12 +20,12 @@ const pinnedApps: PinnedApp[] = [
   { id: 'company-info', name: 'About NJAYCO', icon: Icons.Building, type: 'company' },
 ];
 
-const allPrograms: { id: string; name: string; icon: React.ComponentType<{ className?: string }>; type: WindowType; data?: Record<string, unknown> }[] = [
+const allPrograms: { id: string; name: string; icon: React.ComponentType<{ className?: string }>; type: WindowType; data?: Record<string, unknown>; adminOnly?: boolean }[] = [
   { id: 'explorer', name: 'File Explorer', icon: Icons.FolderOpen, type: 'explorer' },
   { id: 'browser-ie', name: 'Internet Explorer', icon: Icons.Globe, type: 'browser', data: { url: 'https://njayco.com' } },
   { id: 'notepad-new', name: 'Notepad', icon: Icons.FileText, type: 'notepad' },
   { id: 'music-uv-2', name: 'UV Music Group', icon: Icons.Music, type: 'music' },
-  { id: 'admin-cp', name: 'Control Panel', icon: Icons.Settings, type: 'admin' },
+  { id: 'admin-cp', name: 'Control Panel', icon: Icons.Settings, type: 'admin', adminOnly: true },
   { id: 'company-about', name: 'About NJAYCO', icon: Icons.Building, type: 'company' },
   { id: 'company-contact', name: 'Contact', icon: Icons.Mail, type: 'custom' },
 ];
@@ -87,7 +87,7 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
           <div className="flex-1 overflow-y-auto flex flex-col">
             <div className="p-2 border-b border-gray-100">
               <div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-2 py-1">Applications</div>
-              {allPrograms.map(app => (
+              {allPrograms.filter(app => !app.adminOnly || user === 'admin').map(app => (
                 <button key={app.id} onClick={() => { openWindow({ id: app.id, title: app.name, windowType: app.type, data: app.data }); setStartMenuOpen(false); }}
                   className="flex items-center gap-3 p-2 w-full hover:bg-primary hover:text-white rounded transition-colors group text-left">
                   <app.icon className="w-5 h-5 text-primary group-hover:text-white shrink-0" />
