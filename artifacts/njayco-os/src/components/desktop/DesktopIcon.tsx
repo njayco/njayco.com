@@ -55,7 +55,7 @@ function IconBadge({ slug, iconType, iconColor }: { slug: string; iconType: stri
     );
   }
 
-  if (slug === 'denoko') {
+  if (slug === 'denoko' || slug === 'denoko-taxi') {
     return (
       <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#111827' }}>
         {shine}
@@ -141,6 +141,19 @@ function IconBadge({ slug, iconType, iconColor }: { slug: string; iconType: stri
       <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: bg }}>
         {shine}
         <Icons.Building2 className="w-8 h-8 text-white relative z-10" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'recycle-bin') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#1a1a2e' }}>
+        {shine}
+        <img
+          src={`${import.meta.env.BASE_URL}images/njayco-logo.png`}
+          alt="NJAYCO"
+          className="w-10 h-10 object-contain relative z-10"
+        />
       </div>
     );
   }
