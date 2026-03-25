@@ -1,0 +1,27 @@
+packages:
+  "framer-motion": "For boot sequence and smooth window transitions"
+  "react-rnd": "For draggable and resizable windows"
+  "zustand": "For global desktop and window state management"
+  "howler": "For UI sound effects"
+
+images:
+  - path: "artifacts/njayco-os/public/images/njayco-logo.png"
+    description: "Sleek metallic silver geometric corporate logo for NJAYCO on transparent background, futuristic luxury"
+    aspect_ratio: "1:1"
+  - path: "artifacts/njayco-os/public/images/xp-wallpaper.png"
+    description: "Lush rolling green hills with bright blue sky and fluffy clouds, futuristic subtle city skyline on the right horizon, nostalgic 2000s desktop background, premium corporate utopia"
+    aspect_ratio: "16:9"
+  - path: "artifacts/njayco-os/public/images/admin-avatar.png"
+    description: "Luxurious glossy administrator icon with a crown and professional briefcase, 3D rendered, reminiscent of premium Windows XP user account icons"
+    aspect_ratio: "1:1"
+  - path: "artifacts/njayco-os/public/images/user-avatar.png"
+    description: "Glossy professional user icon, sleek corporate workspace theme, 3D rendered, reminiscent of premium Windows XP user account icons"
+    aspect_ratio: "1:1"
+  - path: "artifacts/njayco-os/public/images/guest-avatar.png"
+    description: "Glossy modern guest icon with a backpack and compass, 3D rendered, reminiscent of premium Windows XP user account icons"
+    aspect_ratio: "1:1"
+
+notes:
+  - react-rnd handles draggable window behavior
+  - zustand manages the desktop state across components
+  - framer-motion manages the cinematic boot and login transitions
