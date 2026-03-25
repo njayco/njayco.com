@@ -1,0 +1,744 @@
+NJAYCO OS REPLIT PROMPT
+
+Use this as your full Replit build prompt:
+Build a production-quality web application called NJAYCO OS for NJAYCO.com, the official digital headquarters of The Najee Jeremiah Company (NJAYCO). The application should feel like a person is turning on a Windows XP computer, but the entire operating system is actually a branded interactive website for a conglomerate. The site must be immersive, nostalgic, smooth, premium, and functional, not cheesy. It should combine retro desktop-computer aesthetics with modern web performance and responsive behavior.
+Core Product Vision
+NJAYCO OS is a Windows XP-inspired operating system simulation that serves as the public-facing website and portfolio hub for The Najee Jeremiah Company. Visitors should feel like they are entering the computer desktop of a multimedia, education, technology, logistics, and music conglomerate. Every company division should appear as an app, shortcut, browser page, folder, or document within the desktop operating system.
+The website should function as:
+* an immersive brand experience
+* a desktop-style navigation system
+* a holding company website
+* a live product launcher
+* a music storefront and media player
+* a repository of division business plans
+* an admin-controlled content system
+The site should be highly visual and interactive, but still useful and understandable for real visitors, partners, fans, clients, investors, and customers.
+
+Brand and Company Context
+The parent company is:
+The Najee Jeremiah Company (NJAYCO)
+NJAYCO is a multi-industry holding company and portfolio ecosystem centered around:
+* music
+* technology
+* education
+* media
+* digital product design
+* logistics and transportation software
+* local business infrastructure
+* creative development
+The founder is Najee Jeremiah.
+The major divisions and products that should appear in the operating system include:
+* NJAYCO Corporate
+* About Najee Jeremiah
+* UV EMPIRE
+* Unrevealed Brand
+* UV Music Group
+* Howard Unrevealed
+* Wax Radio
+* YsUp, Inc.
+* YsUp Campus
+* Greet Me
+* Denoko
+* Denoko Taxi
+* Frankie’s Elite Transport
+* Teemer Moving & Storage
+* Prom Queen
+* Phone Msgr
+* Contact
+* Press Kit
+* Investor Info
+* Services / Request for Proposal
+Some of these divisions will open real websites inside an in-app web browser. Others that do not yet have live websites will open Notepad-style text documents that explain the business model, concept, roadmap, and value proposition.
+
+Technical Stack Requirements
+Use a modern full-stack JavaScript or TypeScript stack that works well in Replit.
+Preferred stack:
+* Next.js with App Router
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui for reusable UI primitives where helpful
+* Framer Motion for animations
+* Zustand or Context API for desktop/window state
+* PostgreSQL for database
+* Prisma or Drizzle ORM
+* NextAuth or a custom auth system for login/admin auth
+* Cloudinary, Supabase Storage, AWS S3, or similar for music/media uploads
+* optional Howler.js or similar for UI sounds and music playback
+* optional react-rnd or a custom draggable/resizable window system
+Build the project cleanly and modularly. Use reusable components and clean file structure. The website should be scalable and admin-manageable.
+
+Experience Flow
+1. Boot Experience on First Visit
+On a user’s first visit, they should see a full-screen boot-up sequence inspired by Windows XP:
+* black startup screen
+* NJAYCO-branded Windows-style logo
+* XP-inspired loading animation
+* smooth transition into the login/welcome screen
+* optional startup sound
+* visually polished and nostalgic
+Do not use the exact Microsoft branding. Create an original homage inspired by the era:
+* NJAYCO logo replacing Windows branding
+* XP-like blue gradients
+* startup/loading bar aesthetic
+* original but nostalgic UI
+Use cookies or local storage to remember whether the user has already visited.
+2. Returning Visitor Logic
+Implement session/cookie/local storage logic so that:
+* first-time visitors see the boot sequence
+* returning visitors can skip boot and go directly to welcome or desktop
+* returning logged-in visitors can restore their last session
+* logged-out users return to the welcome screen
+* admin can test/reset this behavior
+Include a settings option:
+* “Always show startup animation”
+
+Welcome / Login Screen
+Create a login screen inspired by the Windows XP Welcome screen.
+It should include three large options:
+* Administrator
+* Log In
+* New Guest
+Administrator
+This opens a secure admin login form.
+Log In
+This allows standard returning users to log in.
+New Guest
+This allows visitors to sign up or enter as a guest account, depending on implementation.
+The background and presentation should feel like a branded NJAYCO version of Windows XP welcome/login. It should feel nostalgic and premium.
+Include soft background motion, gradient lighting, and division iconography tastefully integrated.
+
+Desktop Environment
+After login, users enter the main NJAYCO OS desktop.
+Desktop Requirements
+The desktop should include:
+* wallpaper
+* desktop icons
+* draggable windows
+* resizable windows
+* minimizable/maximizable/closable windows
+* taskbar
+* start button
+* system tray
+* live clock
+* sound controls
+* window focus ordering (z-index handling)
+* active application buttons in taskbar
+* desktop shortcuts
+* right-click behavior if feasible
+* double-click to open icons
+* loading states for apps
+Desktop Wallpaper
+Create a wallpaper inspired by Windows XP’s peaceful energy, but branded for NJAYCO. It should feel like the operating system of a future conglomerate. It can include:
+* rolling hills / blue sky inspiration
+* corporate luxury gradients
+* subtle city/empire motifs
+* NJAYCO branding
+Allow admin to replace/change the wallpaper later.
+
+Desktop Icons and App Logic
+Create desktop shortcut icons for the following:
+* My NJAYCO
+* About Najee Jeremiah
+* NJAYCO Corporate
+* UV EMPIRE
+* Unrevealed Brand
+* UV Music Group
+* Howard Unrevealed
+* Wax Radio
+* YsUp, Inc.
+* YsUp Campus
+* Greet Me
+* Denoko
+* Denoko Taxi
+* Frankie’s Elite Transport
+* Teemer Moving & Storage
+* Prom Queen
+* Phone Msgr
+* Contact
+* Press Kit
+* Investor Info
+* Request for Proposal
+* Recycle Bin
+These shortcuts should open windows in the desktop environment.
+Window Types
+Support different types of windows:
+1. Browser window for divisions with live sites
+2. Notepad window for concepts/business plans without live sites
+3. Custom media app for UV Music Group
+4. Folder/file explorer window where appropriate
+5. Modal/system windows for settings, help, and search
+
+In-App Browser Application
+Build a custom browser window inspired by Internet Explorer / early 2000s browsing.
+Browser Features
+* title bar
+* back button
+* forward button
+* reload button
+* home button
+* address bar display
+* favicon/title display
+* loading state
+* close/minimize/maximize controls
+* resizable window
+* taskbar presence
+* multiple browser windows can be open at once
+Browser Behavior
+For divisions with live websites, clicking the icon opens that website inside the in-app browser window.
+Design the browser so the site can render within an iframe when allowed. If iframe restrictions prevent this, support one of these strategies:
+* fallback preview page with company info and “Open Site” link
+* proxy-safe internal company page for content
+* admin-configurable external link behavior
+Make the architecture flexible.
+Examples:
+* YsUp, Inc. → opens a browser app with YsUp content/site
+* YsUp Campus → opens its site
+* Greet Me → opens its site
+* Wax Radio → opens its site or internal product page
+* Frankie’s Elite Transport → opens its site
+* Teemer Moving & Storage → opens its site if available
+
+Notepad Application
+Build a retro Notepad-style app.
+Features
+* title bar
+* classic text document interface
+* scrollable content
+* plain text or rich text display
+* save/edit if admin
+* read-only for public users unless logged in as admin
+* monospaced or period-appropriate font styling
+* taskbar support
+* multiple documents can be opened
+Use Notepad for divisions that do not yet have live websites. Opening their icon should open a business-plan text file.
+Examples:
+* Denoko → opens DENOKO_BUSINESS_MODEL.txt
+* Howard Unrevealed → opens concept/mission doc
+* Prom Queen → opens concept/roadmap doc
+* UV EMPIRE can open as notepad, folder, or branded landing window if no live site exists
+Include seeded content for each division, based on the business descriptions below.
+
+UV Music Group Application
+Create a custom app inspired by iTunes / Windows Media Player / early digital music stores.
+This app is one of the most important parts of the system.
+The UV Music Group App must support:
+* artist sidebar
+* album grid
+* album detail pages
+* songs list
+* cover art
+* search by artist/song/album
+* now playing bar
+* play/pause
+* previous/next
+* scrub/progress bar
+* volume control
+* playlists
+* featured releases
+* latest releases
+* artist pages
+* purchase/download flow
+* optional streaming previews
+* optional full playback for allowed songs
+* merch/store links
+* admin upload system
+Artists to pre-seed
+* Naww G
+* Urbanswave
+* System The One
+* The Unrevealed Band
+Music library data model should include:
+* artist name
+* artist slug
+* artist bio
+* profile image
+* album title
+* album cover
+* release date
+* genre
+* song title
+* track number
+* audio file URL
+* preview URL
+* price
+* downloadable boolean
+* streamable boolean
+* explicit flag
+* credits
+* lyrics optional
+* featured flag
+Admin Music Upload Features
+Create a secure admin-only music library manager that supports:
+* uploading MP3 files
+* uploading WAV files
+* batch multi-file upload
+* album art upload
+* creating artists
+* creating albums
+* attaching songs to albums
+* writing bios and credits
+* price settings
+* preview-only settings
+* hidden/private/unreleased settings
+* publish/unpublish
+The upload UI should be smooth and practical.
+
+Start Menu Design and Utility
+Build a fully functional Start menu inspired by Windows XP, but adapted for NJAYCO.
+Start Button
+Located on the taskbar at bottom-left.
+Start Menu Requirements
+The menu should open and close smoothly and include:
+Top user area
+* user avatar or icon
+* current username
+* NJAYCO branding
+Pinned / Featured apps
+* NJAYCO Corporate
+* About Najee Jeremiah
+* UV Music Group
+* YsUp, Inc.
+* Greet Me
+* Phone Msgr
+* Contact
+All Programs / Divisions
+* UV EMPIRE
+* Unrevealed Brand
+* UV Music Group
+* Howard Unrevealed
+* Wax Radio
+* YsUp, Inc.
+* YsUp Campus
+* Greet Me
+* Denoko
+* Denoko Taxi
+* Frankie’s Elite Transport
+* Teemer Moving & Storage
+* Prom Queen
+* Phone Msgr
+Documents
+* Executive Summary
+* Founder Bio
+* Company Timeline
+* Business Plans
+* Press Kit
+* Investor Overview
+* Service Catalog
+System / Utility
+* Search
+* Run
+* Settings
+* Help
+* Log Out
+* Shut Down
+Sensible Start Menu Utility
+The Start Menu should genuinely help users navigate the company. It must not be decorative only.
+Search
+Allow search across:
+* divisions
+* documents
+* artists
+* apps
+* business plans
+Run
+Create a playful but useful XP-style Run command prompt. Allow commands like:
+* ysup
+* music
+* greetme
+* denoko
+* taxi
+* contact
+* about
+* njayco
+Typing a valid command should open the matching app or window.
+Shut Down
+Show a Windows-style shutdown modal with options like:
+* Log off
+* Restart session
+* Shut down (fade to black / simulated power off)
+* Cancel
+
+Taskbar Requirements
+The taskbar is essential and should behave like a real operating system.
+It must include:
+* Start button
+* quick-launch area if desired
+* buttons for all open windows
+* active/inactive visual states
+* system tray
+* clock
+* sound icon
+* network icon for flavor if desired
+* user/session icon optional
+Open App Behavior
+When a desktop icon is opened:
+* it creates a taskbar item
+* minimized apps remain in the taskbar
+* clicking taskbar items restores/focuses the app
+* multiple apps can be open simultaneously
+* z-index/focus should work correctly
+Clock
+Display real local time in the taskbar and optionally the date on hover.
+Sound Icon
+Add a master sound control that affects:
+* UI sounds
+* startup sound
+* music player volume
+* browser media volume if feasible
+
+Core Division Content and Seed Data
+Seed the system with meaningful written content for each division. Use these summaries as the basis of the initial app content.
+NJAYCO Corporate
+The parent company and digital headquarters of The Najee Jeremiah Company. A multi-industry holding company building products and services across music, education, software, media, design, and business infrastructure.
+Should include:
+* executive summary
+* founder statement
+* divisions overview
+* revenue model
+* long-term vision
+* contact info
+* partnership opportunities
+About Najee Jeremiah
+Founder bio page/window explaining that Najee Jeremiah is the founder and creative force behind NJAYCO and its ecosystem of ventures in music, education, technology, media, and software.
+Include:
+* founder profile
+* mission
+* creative and entrepreneurial identity
+* ecosystem overview
+* philosophy of building
+UV EMPIRE
+A cultural and entrepreneurial identity layer around the broader company ecosystem. It represents ambition, ownership, execution, aesthetics, and world-building.
+Unrevealed Brand
+A creative technology studio and product development arm focused on rapid AI-assisted app and website development, internal product incubation, brand systems, and digital experiences.
+Revenue model:
+* app development
+* web design
+* branding
+* UI/UX work
+* rapid prototyping
+* custom software services
+UV Music Group
+A label/media/music division for direct artist distribution, digital music commerce, catalog management, artist branding, and fan experiences.
+Revenue model:
+* music sales
+* direct downloads
+* subscriptions
+* merch
+* licensing
+* artist development
+Howard Unrevealed
+A Howard-connected cultural/editorial/legacy concept that can highlight student stories, creative work, campus-centered culture, and future media/editorial possibilities.
+Wax Radio
+A music discovery platform where listeners hear music, react, and help determine which tracks rise through audience response.
+Revenue model:
+* artist promotion credits
+* subscriptions
+* premium placement
+* ads
+* community engagement tools
+YsUp, Inc.
+An education technology company focused on game-based, AI-powered, socially connected learning experiences for students and schools.
+Revenue model:
+* classroom game sales
+* school subscriptions
+* student memberships
+* premium tools
+* institutional partnerships
+YsUp Campus
+A student-facing academic and campus network platform that combines educational search, social networking, school tools, events, class collaboration, and gamified engagement.
+Greet Me
+A digital greeting card and music-as-a-gift platform that turns cards into immersive experiences.
+Revenue model:
+* premium greeting cards
+* music add-ons
+* gifting flows
+* white-label/API possibilities
+Denoko
+A long-term platform and venture umbrella exploring communications, transportation, local services, infrastructure, and cooperative-style digital ecosystems.
+This should open as a business plan document if no live site exists.
+Denoko Taxi
+A taxi dispatch and logistics software platform for local transportation services.
+Revenue model:
+* SaaS subscriptions
+* white-label dispatch tools
+* transport operations software
+Frankie’s Elite Transport
+A premium towing and vehicle transport business with a luxury automotive-inspired interface and service experience.
+Teemer Moving & Storage
+A technology-enabled moving and storage company platform with dynamic booking, dispatch, route visibility, and customer service flows.
+Prom Queen
+A concept-stage product or brand that should open as a planning/business concept document unless a live site is configured.
+Phone Msgr
+A kindness-based social messaging and local discovery app that supports real-time messaging, local social graph features, community interactions, and future offline resilience.
+Revenue model:
+* premium memberships
+* creator monetization tools
+* local events and features
+* paid upgrades
+
+Admin System
+Build a robust Administrator mode.
+Administrator login should take the user into a private dashboard/control system for managing NJAYCO OS.
+Admin features must include:
+* manage desktop icons
+* reorder icons
+* create/edit/delete divisions
+* choose window type for each division
+* edit notepad document contents
+* configure browser destination URLs
+* change wallpaper
+* manage boot settings
+* manage startup sound
+* manage Start menu items
+* manage music/artists/albums/tracks
+* upload files and media
+* create internal documents
+* manage users
+* publish/unpublish divisions
+* see simple analytics if possible
+Admin content model for each division:
+* name
+* slug
+* icon
+* short description
+* full description
+* category
+* live URL
+* window type
+* notepad content
+* featured image
+* active/inactive
+* sort order
+* show on desktop boolean
+* show in Start menu boolean
+
+File / Folder / My Computer Style Features
+Create a lightweight “My NJAYCO” or “My Computer” application that acts like a file explorer for company content.
+It can include:
+* Divisions folder
+* Documents folder
+* Music folder
+* Media folder
+* Press Kit folder
+* Investor folder
+* Services folder
+This helps the OS feel complete and gives users another navigation path.
+
+Contact and Business Utility
+Build utility windows/pages for real business use:
+* Contact NJAYCO
+* Request for Proposal
+* Music inquiry form
+* Partnership inquiry form
+* Press inquiry form
+These can live as internal pages or forms within windows.
+Include clean CTAs and form handling.
+
+Database Models
+Create a sensible database schema covering at least:
+Users
+* id
+* name
+* email
+* password hash
+* role
+* avatar
+* createdAt
+Divisions
+* id
+* name
+* slug
+* shortDescription
+* fullDescription
+* icon
+* category
+* liveUrl
+* windowType
+* notepadContent
+* featuredImage
+* isPublished
+* showOnDesktop
+* showInStartMenu
+* sortOrder
+* createdAt
+* updatedAt
+Documents
+* id
+* title
+* slug
+* content
+* type
+* divisionId optional
+* isPublished
+* createdAt
+* updatedAt
+Artists
+* id
+* name
+* slug
+* bio
+* image
+* createdAt
+* updatedAt
+Albums
+* id
+* artistId
+* title
+* slug
+* coverImage
+* releaseDate
+* genre
+* description
+* isPublished
+* createdAt
+* updatedAt
+Tracks
+* id
+* albumId
+* artistId
+* title
+* trackNumber
+* audioUrl
+* previewUrl
+* price
+* isDownloadable
+* isStreamable
+* isPublished
+* duration
+* explicit
+* lyrics optional
+* credits optional
+* createdAt
+* updatedAt
+SiteSettings
+* id
+* wallpaperUrl
+* startupSoundUrl
+* alwaysShowBootDefault
+* companyName
+* supportEmail
+* theme settings
+
+Design Direction
+The UI should be heavily inspired by the early 2000s Windows XP era, but should still look clean and premium in a 2026 web app.
+Visual characteristics:
+* blue gradients
+* glossy buttons
+* beveled edges where appropriate
+* soft shadows
+* glassy retro surfaces
+* warm nostalgic desktop feel
+* polished animations
+* skinnable windows
+* clear iconography
+* smooth transitions
+* tasteful skeuomorphism
+Avoid copyright infringement. Do not clone exact Microsoft assets. Create original visuals inspired by the era.
+
+Animation and Interaction Requirements
+Add strong immersive polish:
+* startup animation
+* window open/close/minimize animations
+* taskbar interaction feedback
+* Start menu slide/fade animation
+* login transitions
+* hover states on icons
+* desktop selection states
+* drag behavior that feels smooth
+* loading indicators for browser/notepad/media windows
+Optional extras:
+* desktop click sound
+* window open sound
+* shutdown animation
+* startup chime
+
+Responsive Strategy
+This is primarily a desktop/laptop experience, but it should still be usable on mobile.
+Desktop
+Full OS simulation.
+Tablet
+Mostly full experience with adapted spacing.
+Mobile
+Create a simplified “NJAYCO Pocket OS” version:
+* reduced desktop density
+* stacked windows or fullscreen panels
+* touch-friendly controls
+* still keeps XP-inspired vibe
+* maintains branding and navigation logic
+Do not ignore mobile completely.
+
+Accessibility and Performance
+Even though this is immersive, it must still be usable:
+* keyboard navigation where possible
+* accessible labels for auth/forms
+* performant startup sequence
+* optimized media loading
+* lazy loading for windows/apps
+* prevent the desktop from becoming sluggish
+* handle many open windows reasonably
+
+Build Priorities
+Please implement in phases and keep the project structured.
+Phase 1
+* project setup
+* desktop shell
+* boot sequence
+* login screen
+* desktop icons
+* window manager
+* taskbar
+* Start menu
+Phase 2
+* browser app
+* notepad app
+* seeded division content
+* persistent state
+* auth system
+Phase 3
+* UV Music Group custom app
+* music upload/admin system
+* admin dashboard
+* documents and explorer views
+Phase 4
+* polish
+* sounds
+* mobile adaptation
+* analytics
+* improved content editing
+
+Deliverables
+Build the actual app, not just a mockup.
+Deliver:
+* clean full-stack codebase
+* modular components
+* database schema
+* seed data
+* reusable window manager
+* working taskbar
+* working Start menu
+* boot/login/desktop flow
+* notepad and browser apps
+* UV Music Group app with upload-ready architecture
+* admin dashboard
+* README with setup instructions
+* clear environment variables list
+
+Important Implementation Notes
+* Make this feel like a real operating system, not just a landing page with gimmicky boxes.
+* The opened app icons must appear in the taskbar like real running applications.
+* The desktop icons should be functional and dynamic.
+* The Start menu must be actually useful for navigation.
+* Notepad documents should feel like legitimate internal business files.
+* The music app should feel like a true label/media platform, not just a playlist page.
+* Architect the project so I can later add more divisions, apps, artists, and media easily.
+* Seed the content richly so the site already feels alive on first build.
+At the end of the build, also create a short README section explaining:
+1. how to run the app
+2. how to log in as admin
+3. how to edit divisions
+4. how to upload music
+5. how to add new desktop icons/apps
+6. how to change wallpaper and startup behavior
+Also include sample seed content for all divisions so the website feels fully populated on day one.
+I can also turn this into a shorter, cleaner Replit agent prompt optimized for faster code generation in one shot.
