@@ -136,7 +136,7 @@ export function ExplorerApp() {
                     >
                       <Icons.FileText className="w-10 h-10 text-blue-400" />
                       <span className="text-xs text-center font-medium leading-tight">{doc.filename}</span>
-                      <span className="text-[10px] text-slate-400">{(doc.fileSize / 1024).toFixed(1)} KB</span>
+                      <span className="text-[10px] text-slate-400 capitalize">{doc.fileType} file</span>
                     </div>
                   ))}
                 </div>

@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
-import { useDesktopStore, WindowState } from '@/store/use-desktop-store';
+import { useDesktopStore } from '@/store/use-desktop-store';
 import { DesktopIcon } from '@/components/desktop/DesktopIcon';
 import { Taskbar } from '@/components/desktop/Taskbar';
 import { WindowWrapper } from '@/components/desktop/WindowWrapper';
 import { useGetDivisions } from '@/hooks/use-music-hooks';
+import type { WindowType } from '@/store/use-desktop-store';
 import * as Icons from 'lucide-react';
 
 export default function Desktop() {
@@ -53,7 +53,7 @@ export default function Desktop() {
               id={`div-${div.id}`}
               name={div.name}
               iconType={div.iconType || 'Folder'}
-              windowType={(div.windowType as any) || 'browser'}
+              windowType={(div.windowType as WindowType) || 'browser'}
               data={{ url: div.websiteUrl, content: div.notepadContent, division: div }}
             />
           ))

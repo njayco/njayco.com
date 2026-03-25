@@ -51,6 +51,40 @@ export const GetDivisionsResponseItem = zod.object({
 export const GetDivisionsResponse = zod.array(GetDivisionsResponseItem);
 
 /**
+ * @summary Create a new division (admin)
+ */
+export const CreateDivisionBody = zod.object({
+  slug: zod.string(),
+  name: zod.string(),
+  shortDescription: zod.string(),
+  fullDescription: zod.string(),
+  websiteUrl: zod.string().nullish(),
+  iconType: zod.string(),
+  iconColor: zod.string(),
+  windowType: zod.enum([
+    "browser",
+    "notepad",
+    "music",
+    "explorer",
+    "admin",
+    "custom",
+  ]),
+  notepadContent: zod.string().nullish(),
+  status: zod.enum(["live", "development", "concept"]),
+  category: zod.enum([
+    "music",
+    "tech",
+    "education",
+    "logistics",
+    "media",
+    "corporate",
+    "creative",
+  ]),
+  sortOrder: zod.number(),
+  featured: zod.boolean(),
+});
+
+/**
  * @summary Get a division by ID
  */
 export const GetDivisionParams = zod.object({
@@ -102,6 +136,18 @@ export const GetArtistsResponseItem = zod.object({
   featured: zod.boolean(),
 });
 export const GetArtistsResponse = zod.array(GetArtistsResponseItem);
+
+/**
+ * @summary Create a new artist (admin)
+ */
+export const CreateArtistBody = zod.object({
+  slug: zod.string(),
+  name: zod.string(),
+  bio: zod.string(),
+  genre: zod.string(),
+  imageUrl: zod.string().nullish(),
+  featured: zod.boolean(),
+});
 
 /**
  * @summary Get artist by ID
@@ -180,6 +226,20 @@ export const GetAlbumsResponseItem = zod.object({
   trackCount: zod.number(),
 });
 export const GetAlbumsResponse = zod.array(GetAlbumsResponseItem);
+
+/**
+ * @summary Create a new album (admin)
+ */
+export const CreateAlbumBody = zod.object({
+  artistId: zod.number(),
+  title: zod.string(),
+  coverUrl: zod.string().nullish(),
+  releaseYear: zod.number(),
+  genre: zod.string(),
+  price: zod.number(),
+  albumType: zod.enum(["album", "ep", "single"]),
+  featured: zod.boolean(),
+});
 
 /**
  * @summary Get album by ID with tracks

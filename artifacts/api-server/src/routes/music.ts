@@ -1,15 +1,40 @@
-import { Router, type IRouter } from "express";
+import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
 import { db, artistsTable, albumsTable, tracksTable } from "@workspace/db";
+import { insertArtistSchema, insertAlbumSchema } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 
 const router: IRouter = Router();
+
+function requireAdmin(req: Request, res: Response, next: NextFunction): void {
+  const token = req.headers["x-admin-token"] as string | undefined;
+  const adminToken = process.env.ADMIN_TOKEN;
+  if (adminToken && token !== adminToken) {
+    res.status(403).json({ error: "Forbidden: admin access required" });
+    return;
+  }
+  next();
+}
 
 router.get("/artists", async (_req, res) => {
   try {
     const artists = await db.select().from(artistsTable).orderBy(artistsTable.name);
     res.json(artists);
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch artists" });
+  }
+});
+
+router.post("/artists", requireAdmin, async (req, res) => {
+  try {
+    const parsed = insertArtistSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: "Validation failed", details: parsed.error.flatten() });
+      return;
+    }
+    const [created] = await db.insert(artistsTable).values(parsed.data).returning();
+    res.status(201).json(created);
+  } catch (_err) {
+    res.status(500).json({ error: "Failed to create artist" });
   }
 });
 
@@ -46,7 +71,7 @@ router.get("/artists/:id", async (req, res) => {
     });
 
     res.json({ ...artist, albums: albumsWithMeta, topTracks: tracksWithMeta });
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch artist" });
   }
 });
@@ -57,7 +82,6 @@ router.get("/albums", async (req, res) => {
     const artists = await db.select().from(artistsTable);
     const artistMap = new Map(artists.map(a => [a.id, a.name]));
 
-    let query = db.select().from(albumsTable);
     const albums = artistId
       ? await db.select().from(albumsTable).where(eq(albumsTable.artistId, artistId))
       : await db.select().from(albumsTable);
@@ -74,8 +98,27 @@ router.get("/albums", async (req, res) => {
       trackCount: trackCountMap.get(a.id) ?? 0,
     }));
     res.json(result);
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch albums" });
+  }
+});
+
+router.post("/albums", requireAdmin, async (req, res) => {
+  try {
+    const parsed = insertAlbumSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: "Validation failed", details: parsed.error.flatten() });
+      return;
+    }
+    const [artist] = await db.select().from(artistsTable).where(eq(artistsTable.id, parsed.data.artistId));
+    const [created] = await db.insert(albumsTable).values(parsed.data).returning();
+    res.status(201).json({
+      ...created,
+      artistName: artist?.name ?? "",
+      trackCount: 0,
+    });
+  } catch (_err) {
+    res.status(500).json({ error: "Failed to create album" });
   }
 });
 
@@ -106,7 +149,7 @@ router.get("/albums/:id", async (req, res) => {
       trackCount: tracks.length,
       tracks: tracksWithMeta,
     });
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch album" });
   }
 });
@@ -136,7 +179,7 @@ router.get("/tracks", async (req, res) => {
       albumTitle: albumMap.get(t.albumId) ?? "",
     }));
     res.json(result);
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch tracks" });
   }
 });

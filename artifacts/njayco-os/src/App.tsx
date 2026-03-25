@@ -17,9 +17,9 @@ const queryClient = new QueryClient({
 });
 
 function OSManager() {
-  const { visited, user } = useDesktopStore();
+  const { visited, user, alwaysShowStartup } = useDesktopStore();
   
-  if (!visited) return <BootScreen />;
+  if (!visited || alwaysShowStartup) return <BootScreen />;
   if (!user) return <LoginScreen />;
   return <Desktop />;
 }

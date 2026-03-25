@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import * as Icons from 'lucide-react';
-import { useGetAdminStats, useGetDivisions, useUpdateDivision } from '@/hooks/use-music-hooks';
+import { useGetAdminStats, useGetDivisions } from '@/hooks/use-music-hooks';
+import { useDesktopStore } from '@/store/use-desktop-store';
 
 export function AdminApp() {
   const { data: stats } = useGetAdminStats();
   const { data: divisions } = useGetDivisions();
+  const { alwaysShowStartup, setAlwaysShowStartup, setVisited, setUser } = useDesktopStore();
   
   const [activeTab, setActiveTab] = useState('dashboard');
 
@@ -30,7 +32,7 @@ export function AdminApp() {
       {/* Main Panel */}
       <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
         <div className="h-14 bg-white border-b border-slate-200 flex items-center px-6 shadow-sm z-10">
-          <h1 className="text-xl font-bold text-slate-800 capitalize">{activeTab}</h1>
+          <h1 className="text-xl font-bold text-slate-800 capitalize">{activeTab === 'settings' ? 'System Settings' : activeTab}</h1>
         </div>
         
         <div className="flex-1 overflow-y-auto p-6">
@@ -95,6 +97,58 @@ export function AdminApp() {
                     )}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2">
+                  <Icons.Monitor className="w-5 h-5 text-blue-500" /> Boot &amp; Login
+                </h3>
+                <p className="text-sm text-slate-500 mb-5">Control the startup experience shown when visitors open NJAYCO OS.</p>
+
+                <div className="flex items-center justify-between py-4 border-b border-slate-100">
+                  <div>
+                    <p className="font-medium text-slate-800 text-sm">Always show boot &amp; login on startup</p>
+                    <p className="text-xs text-slate-500 mt-0.5">When enabled, every visit will play through the full boot sequence and login screen, even for returning visitors.</p>
+                  </div>
+                  <button
+                    onClick={() => setAlwaysShowStartup(!alwaysShowStartup)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${alwaysShowStartup ? 'bg-blue-600' : 'bg-slate-300'}`}
+                    role="switch"
+                    aria-checked={alwaysShowStartup}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform ${alwaysShowStartup ? 'translate-x-6' : 'translate-x-1'}`} />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between py-4">
+                  <div>
+                    <p className="font-medium text-slate-800 text-sm">Reset visit state</p>
+                    <p className="text-xs text-slate-500 mt-0.5">Clears the stored session so the next page load will show the full boot sequence.</p>
+                  </div>
+                  <button
+                    onClick={() => { setVisited(false); setUser(null); }}
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2">
+                  <Icons.Info className="w-5 h-5 text-slate-400" /> System Info
+                </h3>
+                <p className="text-sm text-slate-500 mb-4">Details about the current NJAYCO OS environment.</p>
+                <dl className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm">
+                  <dt className="text-slate-500">OS Version</dt><dd className="font-medium text-slate-800">NJAYCO OS 1.0</dd>
+                  <dt className="text-slate-500">Build</dt><dd className="font-medium text-slate-800">2025.03</dd>
+                  <dt className="text-slate-500">API Status</dt><dd className="font-medium text-green-600">Online</dd>
+                  <dt className="text-slate-500">Divisions loaded</dt><dd className="font-medium text-slate-800">{stats?.totalDivisions ?? '…'}</dd>
+                </dl>
               </div>
             </div>
           )}

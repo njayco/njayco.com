@@ -19,10 +19,13 @@ import type {
 import type {
   AdminStats,
   Album,
+  AlbumCreate,
   AlbumDetail,
   Artist,
+  ArtistCreate,
   ArtistDetail,
   Division,
+  DivisionCreate,
   DivisionUpdate,
   Document,
   GetAlbumsParams,
@@ -192,6 +195,92 @@ export function useGetDivisions<
 }
 
 /**
+ * @summary Create a new division (admin)
+ */
+export const getCreateDivisionUrl = () => {
+  return `/api/divisions`;
+};
+
+export const createDivision = async (
+  divisionCreate: DivisionCreate,
+  options?: RequestInit,
+): Promise<Division> => {
+  return customFetch<Division>(getCreateDivisionUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(divisionCreate),
+  });
+};
+
+export const getCreateDivisionMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDivision>>,
+    TError,
+    { data: BodyType<DivisionCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createDivision>>,
+  TError,
+  { data: BodyType<DivisionCreate> },
+  TContext
+> => {
+  const mutationKey = ["createDivision"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createDivision>>,
+    { data: BodyType<DivisionCreate> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createDivision(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateDivisionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createDivision>>
+>;
+export type CreateDivisionMutationBody = BodyType<DivisionCreate>;
+export type CreateDivisionMutationError = ErrorType<void>;
+
+/**
+ * @summary Create a new division (admin)
+ */
+export const useCreateDivision = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDivision>>,
+    TError,
+    { data: BodyType<DivisionCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createDivision>>,
+  TError,
+  { data: BodyType<DivisionCreate> },
+  TContext
+> => {
+  return useMutation(getCreateDivisionMutationOptions(options));
+};
+
+/**
  * @summary Get a division by ID
  */
 export const getGetDivisionUrl = (id: number) => {
@@ -350,6 +439,92 @@ export function useGetArtists<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Create a new artist (admin)
+ */
+export const getCreateArtistUrl = () => {
+  return `/api/artists`;
+};
+
+export const createArtist = async (
+  artistCreate: ArtistCreate,
+  options?: RequestInit,
+): Promise<Artist> => {
+  return customFetch<Artist>(getCreateArtistUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(artistCreate),
+  });
+};
+
+export const getCreateArtistMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createArtist>>,
+    TError,
+    { data: BodyType<ArtistCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createArtist>>,
+  TError,
+  { data: BodyType<ArtistCreate> },
+  TContext
+> => {
+  const mutationKey = ["createArtist"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createArtist>>,
+    { data: BodyType<ArtistCreate> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createArtist(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateArtistMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createArtist>>
+>;
+export type CreateArtistMutationBody = BodyType<ArtistCreate>;
+export type CreateArtistMutationError = ErrorType<void>;
+
+/**
+ * @summary Create a new artist (admin)
+ */
+export const useCreateArtist = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createArtist>>,
+    TError,
+    { data: BodyType<ArtistCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createArtist>>,
+  TError,
+  { data: BodyType<ArtistCreate> },
+  TContext
+> => {
+  return useMutation(getCreateArtistMutationOptions(options));
+};
 
 /**
  * @summary Get artist by ID
@@ -529,6 +704,92 @@ export function useGetAlbums<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Create a new album (admin)
+ */
+export const getCreateAlbumUrl = () => {
+  return `/api/albums`;
+};
+
+export const createAlbum = async (
+  albumCreate: AlbumCreate,
+  options?: RequestInit,
+): Promise<Album> => {
+  return customFetch<Album>(getCreateAlbumUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(albumCreate),
+  });
+};
+
+export const getCreateAlbumMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAlbum>>,
+    TError,
+    { data: BodyType<AlbumCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createAlbum>>,
+  TError,
+  { data: BodyType<AlbumCreate> },
+  TContext
+> => {
+  const mutationKey = ["createAlbum"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createAlbum>>,
+    { data: BodyType<AlbumCreate> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createAlbum(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateAlbumMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createAlbum>>
+>;
+export type CreateAlbumMutationBody = BodyType<AlbumCreate>;
+export type CreateAlbumMutationError = ErrorType<void>;
+
+/**
+ * @summary Create a new album (admin)
+ */
+export const useCreateAlbum = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAlbum>>,
+    TError,
+    { data: BodyType<AlbumCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createAlbum>>,
+  TError,
+  { data: BodyType<AlbumCreate> },
+  TContext
+> => {
+  return useMutation(getCreateAlbumMutationOptions(options));
+};
 
 /**
  * @summary Get album by ID with tracks

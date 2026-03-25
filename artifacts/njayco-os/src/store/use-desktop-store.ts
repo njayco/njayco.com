@@ -16,6 +16,7 @@ export interface WindowState {
 interface DesktopStore {
   visited: boolean;
   user: 'admin' | 'user' | 'guest' | null;
+  alwaysShowStartup: boolean;
   windows: WindowState[];
   nextZIndex: number;
   activeWindowId: string | null;
@@ -23,6 +24,7 @@ interface DesktopStore {
   
   setVisited: (v: boolean) => void;
   setUser: (u: 'admin' | 'user' | 'guest' | null) => void;
+  setAlwaysShowStartup: (v: boolean) => void;
   setStartMenuOpen: (v: boolean) => void;
   
   openWindow: (win: Omit<WindowState, 'isMinimized' | 'isMaximized' | 'zIndex'>) => void;
@@ -38,6 +40,7 @@ export const useDesktopStore = create<DesktopStore>()(
     (set, get) => ({
       visited: false,
       user: null,
+      alwaysShowStartup: false,
       windows: [],
       nextZIndex: 10,
       activeWindowId: null,
@@ -45,6 +48,7 @@ export const useDesktopStore = create<DesktopStore>()(
 
       setVisited: (visited) => set({ visited }),
       setUser: (user) => set({ user }),
+      setAlwaysShowStartup: (alwaysShowStartup) => set({ alwaysShowStartup }),
       setStartMenuOpen: (startMenuOpen) => set({ startMenuOpen }),
 
       openWindow: (win) => {
@@ -112,7 +116,11 @@ export const useDesktopStore = create<DesktopStore>()(
     }),
     {
       name: 'njayco-os-storage',
-      partialize: (state) => ({ visited: state.visited, user: state.user })
+      partialize: (state) => ({
+        visited: state.visited,
+        user: state.user,
+        alwaysShowStartup: state.alwaysShowStartup
+      })
     }
   )
 );

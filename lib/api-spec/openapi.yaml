@@ -46,6 +46,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Division"
+    post:
+      operationId: createDivision
+      tags: [divisions]
+      summary: Create a new division (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DivisionCreate"
+      responses:
+        "201":
+          description: Created division
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Division"
+        "400":
+          description: Validation error
 
   /divisions/{id}:
     get:
@@ -82,6 +101,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Artist"
+    post:
+      operationId: createArtist
+      tags: [music]
+      summary: Create a new artist (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArtistCreate"
+      responses:
+        "201":
+          description: Created artist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+        "400":
+          description: Validation error
 
   /artists/{id}:
     get:
@@ -122,6 +160,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Album"
+    post:
+      operationId: createAlbum
+      tags: [music]
+      summary: Create a new album (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlbumCreate"
+      responses:
+        "201":
+          description: Created album
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Album"
+        "400":
+          description: Validation error
 
   /albums/{id}:
     get:
@@ -300,6 +357,53 @@ components:
         - sortOrder
         - featured
 
+    DivisionCreate:
+      type: object
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        shortDescription:
+          type: string
+        fullDescription:
+          type: string
+        websiteUrl:
+          type: string
+          nullable: true
+        iconType:
+          type: string
+        iconColor:
+          type: string
+        windowType:
+          type: string
+          enum: [browser, notepad, music, explorer, admin, custom]
+        notepadContent:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [live, development, concept]
+        category:
+          type: string
+          enum: [music, tech, education, logistics, media, corporate, creative]
+        sortOrder:
+          type: integer
+        featured:
+          type: boolean
+      required:
+        - slug
+        - name
+        - shortDescription
+        - fullDescription
+        - iconType
+        - iconColor
+        - windowType
+        - status
+        - category
+        - sortOrder
+        - featured
+
     DivisionUpdate:
       type: object
       properties:
@@ -318,6 +422,59 @@ components:
           type: boolean
       required:
         - id
+
+    ArtistCreate:
+      type: object
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        bio:
+          type: string
+        genre:
+          type: string
+        imageUrl:
+          type: string
+          nullable: true
+        featured:
+          type: boolean
+      required:
+        - slug
+        - name
+        - bio
+        - genre
+        - featured
+
+    AlbumCreate:
+      type: object
+      properties:
+        artistId:
+          type: integer
+        title:
+          type: string
+        coverUrl:
+          type: string
+          nullable: true
+        releaseYear:
+          type: integer
+        genre:
+          type: string
+        price:
+          type: number
+        albumType:
+          type: string
+          enum: [album, ep, single]
+        featured:
+          type: boolean
+      required:
+        - artistId
+        - title
+        - releaseYear
+        - genre
+        - price
+        - albumType
+        - featured
 
     Artist:
       type: object

@@ -60,6 +60,56 @@ export interface Division {
   featured: boolean;
 }
 
+export type DivisionCreateWindowType =
+  (typeof DivisionCreateWindowType)[keyof typeof DivisionCreateWindowType];
+
+export const DivisionCreateWindowType = {
+  browser: "browser",
+  notepad: "notepad",
+  music: "music",
+  explorer: "explorer",
+  admin: "admin",
+  custom: "custom",
+} as const;
+
+export type DivisionCreateStatus =
+  (typeof DivisionCreateStatus)[keyof typeof DivisionCreateStatus];
+
+export const DivisionCreateStatus = {
+  live: "live",
+  development: "development",
+  concept: "concept",
+} as const;
+
+export type DivisionCreateCategory =
+  (typeof DivisionCreateCategory)[keyof typeof DivisionCreateCategory];
+
+export const DivisionCreateCategory = {
+  music: "music",
+  tech: "tech",
+  education: "education",
+  logistics: "logistics",
+  media: "media",
+  corporate: "corporate",
+  creative: "creative",
+} as const;
+
+export interface DivisionCreate {
+  slug: string;
+  name: string;
+  shortDescription: string;
+  fullDescription: string;
+  websiteUrl?: string | null;
+  iconType: string;
+  iconColor: string;
+  windowType: DivisionCreateWindowType;
+  notepadContent?: string | null;
+  status: DivisionCreateStatus;
+  category: DivisionCreateCategory;
+  sortOrder: number;
+  featured: boolean;
+}
+
 export interface DivisionUpdate {
   id: number;
   name?: string;
@@ -67,6 +117,35 @@ export interface DivisionUpdate {
   websiteUrl?: string | null;
   status?: string;
   featured?: boolean;
+}
+
+export interface ArtistCreate {
+  slug: string;
+  name: string;
+  bio: string;
+  genre: string;
+  imageUrl?: string | null;
+  featured: boolean;
+}
+
+export type AlbumCreateAlbumType =
+  (typeof AlbumCreateAlbumType)[keyof typeof AlbumCreateAlbumType];
+
+export const AlbumCreateAlbumType = {
+  album: "album",
+  ep: "ep",
+  single: "single",
+} as const;
+
+export interface AlbumCreate {
+  artistId: number;
+  title: string;
+  coverUrl?: string | null;
+  releaseYear: number;
+  genre: string;
+  price: number;
+  albumType: AlbumCreateAlbumType;
+  featured: boolean;
 }
 
 export interface Artist {

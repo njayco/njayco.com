@@ -1,9 +1,18 @@
-import { Router, type IRouter } from "express";
+import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
 import { db, divisionsTable, artistsTable, tracksTable, documentsTable } from "@workspace/db";
-import { eq } from "drizzle-orm";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 const router: IRouter = Router();
+
+function requireAdmin(req: Request, res: Response, next: NextFunction): void {
+  const token = req.headers["x-admin-token"] as string | undefined;
+  const adminToken = process.env.ADMIN_TOKEN;
+  if (adminToken && token !== adminToken) {
+    res.status(403).json({ error: "Forbidden: admin access required" });
+    return;
+  }
+  next();
+}
 
 router.get("/admin/stats", async (_req, res) => {
   try {
@@ -20,14 +29,14 @@ router.get("/admin/stats", async (_req, res) => {
       totalArtists: Number(artistCountResult.count),
       totalDocuments: Number(docCountResult.count),
     });
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch admin stats" });
   }
 });
 
-router.put("/admin/divisions", async (req, res) => {
+router.put("/admin/divisions", requireAdmin, async (req, res) => {
   try {
-    const { id, ...updates } = req.body;
+    const { id, ...updates } = req.body as { id: number; [key: string]: unknown };
     if (!id) {
       res.status(400).json({ error: "ID required" });
       return;
@@ -37,7 +46,7 @@ router.put("/admin/divisions", async (req, res) => {
       .where(eq(divisionsTable.id, id))
       .returning();
     res.json(updated);
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to update division" });
   }
 });

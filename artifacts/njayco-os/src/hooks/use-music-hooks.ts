@@ -1,61 +1,61 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Division, Artist, Album, Track, Document, AdminStats, DivisionUpdate } from "@workspace/api-client-react";
 import { 
   getDivisions, getArtists, getAlbums, getTracks, getDocuments, getAdminStats, updateDivision 
 } from "@workspace/api-client-react";
 
-// Wrapper hooks to handle potential API absence gracefully
 export function useGetDivisions() {
-  return useQuery({
+  return useQuery<Division[]>({
     queryKey: ['/api/divisions'],
-    queryFn: () => getDivisions().catch(() => []),
+    queryFn: () => getDivisions().catch((): Division[] => []),
   });
 }
 
 export function useGetArtists() {
-  return useQuery({
+  return useQuery<Artist[]>({
     queryKey: ['/api/artists'],
-    queryFn: () => getArtists().catch(() => []),
+    queryFn: () => getArtists().catch((): Artist[] => []),
   });
 }
 
 export function useGetAlbums() {
-  return useQuery({
+  return useQuery<Album[]>({
     queryKey: ['/api/albums'],
-    queryFn: () => getAlbums().catch(() => []),
+    queryFn: () => getAlbums().catch((): Album[] => []),
   });
 }
 
 export function useGetTracks() {
-  return useQuery({
+  return useQuery<Track[]>({
     queryKey: ['/api/tracks'],
-    queryFn: () => getTracks().catch(() => []),
+    queryFn: () => getTracks().catch((): Track[] => []),
   });
 }
 
 export function useGetDocuments() {
-  return useQuery({
+  return useQuery<Document[]>({
     queryKey: ['/api/documents'],
-    queryFn: () => getDocuments().catch(() => []),
+    queryFn: () => getDocuments().catch((): Document[] => []),
   });
 }
 
 export function useGetAdminStats() {
-  return useQuery({
+  return useQuery<AdminStats>({
     queryKey: ['/api/admin/stats'],
-    queryFn: () => getAdminStats().catch(() => ({
-      totalDivisions: 15,
-      activeDivisions: 8,
-      totalTracks: 124,
-      totalArtists: 4,
-      totalDocuments: 22
+    queryFn: () => getAdminStats().catch((): AdminStats => ({
+      totalDivisions: 0,
+      activeDivisions: 0,
+      totalTracks: 0,
+      totalArtists: 0,
+      totalDocuments: 0
     })),
   });
 }
 
 export function useUpdateDivision() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: updateDivision,
+  return useMutation<Division, Error, DivisionUpdate>({
+    mutationFn: (data: DivisionUpdate) => updateDivision(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/divisions'] });
     }
