@@ -16,8 +16,8 @@ export default function Desktop() {
     ? [{ id: 'admin-panel', name: 'Control Panel', iconType: 'Settings', windowType: 'admin' as const }]
     : [];
   
-  // IDs of divisions handled by coreIcons already (to avoid duplicates on desktop)
-  const hiddenDivisionSlugs = new Set(['my-njayco', 'recycle-bin']);
+  // Slugs that should never render as regular division window icons
+  const hiddenDivisionSlugs = new Set<string>();
 
   return (
     <div 

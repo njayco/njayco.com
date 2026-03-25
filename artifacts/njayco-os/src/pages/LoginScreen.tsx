@@ -1,9 +1,22 @@
 import { useDesktopStore } from '@/store/use-desktop-store';
 import { motion } from 'framer-motion';
 import * as Icons from 'lucide-react';
+import { useGetDivisions } from '@/hooks/use-music-hooks';
+import type { LucideIcon } from 'lucide-react';
+
+type LucideIcons = typeof Icons;
+function getDivisionIcon(name?: string): LucideIcon {
+  if (!name) return Icons.Folder;
+  const toPascalCase = (s: string) => s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+  const key = toPascalCase(name) as keyof LucideIcons;
+  const icon = Icons[key];
+  if (icon && typeof icon === 'function') return icon as LucideIcon;
+  return Icons.Folder;
+}
 
 export default function LoginScreen() {
   const setUser = useDesktopStore(s => s.setUser);
+  const { data: divisions } = useGetDivisions();
 
   const handleLogin = (role: 'admin' | 'user' | 'guest') => {
     setUser(role);
@@ -20,6 +33,60 @@ export default function LoginScreen() {
           className="w-full h-full object-cover opacity-40 blur-sm scale-105" 
         />
       </div>
+
+      {/* Division Icons Sidebar — decorative, blurred, left side */}
+      {divisions && divisions.length > 0 && (
+        <div className="absolute left-0 top-0 h-full w-48 z-5 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-transparent" />
+          <div className="absolute inset-0 backdrop-blur-sm" />
+          <div className="relative z-10 flex flex-col gap-3 p-6 pt-16 opacity-60">
+            {divisions.slice(0, 14).map((div, i) => {
+              const DivIcon = getDivisionIcon(div.iconType);
+              return (
+                <motion.div
+                  key={div.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.4 }}
+                  className="flex items-center gap-3"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                    <DivIcon className="w-4 h-4 text-white/80" />
+                  </div>
+                  <span className="text-white/60 text-xs font-medium truncate">{div.name}</span>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Division Icons Sidebar — right side */}
+      {divisions && divisions.length > 7 && (
+        <div className="absolute right-0 top-0 h-full w-48 z-5 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-l from-blue-900/80 to-transparent" />
+          <div className="absolute inset-0 backdrop-blur-sm" />
+          <div className="relative z-10 flex flex-col gap-3 p-6 pt-16 opacity-50 items-end">
+            {divisions.slice(14, 22).map((div, i) => {
+              const DivIcon = getDivisionIcon(div.iconType);
+              return (
+                <motion.div
+                  key={div.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 + 0.3, duration: 0.4 }}
+                  className="flex items-center gap-3"
+                >
+                  <span className="text-white/60 text-xs font-medium truncate">{div.name}</span>
+                  <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                    <DivIcon className="w-4 h-4 text-white/80" />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Main Login Card */}
       <motion.div 
@@ -83,6 +150,11 @@ export default function LoginScreen() {
               <span className="text-sm font-medium">Restart</span>
             </button>
           </div>
+          {divisions && (
+            <div className="text-blue-200/60 text-xs font-mono">
+              {divisions.length} division{divisions.length !== 1 ? 's' : ''} loaded
+            </div>
+          )}
         </div>
       </motion.div>
     </div>
