@@ -15,7 +15,7 @@ function requireAdmin(req: Request, res: Response, next: NextFunction): void {
   next();
 }
 
-router.get("/admin/stats", async (_req, res) => {
+router.get("/admin/stats", requireAdmin, async (_req, res) => {
   try {
     const [divCountResult] = await db.select({ count: sql<number>`count(*)` }).from(divisionsTable);
     const [activeDivResult] = await db.select({ count: sql<number>`count(*)` }).from(divisionsTable).where(eq(divisionsTable.status, "live"));

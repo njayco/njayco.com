@@ -40,15 +40,19 @@ export function useGetDocuments() {
 }
 
 export function useGetAdminStats() {
+  const adminToken = import.meta.env.VITE_ADMIN_TOKEN as string | undefined;
   return useQuery<AdminStats>({
     queryKey: ['/api/admin/stats'],
-    queryFn: () => getAdminStats().catch((): AdminStats => ({
+    queryFn: () => getAdminStats({
+      headers: adminToken ? { 'x-admin-token': adminToken } : {},
+    }).catch((): AdminStats => ({
       totalDivisions: 0,
       activeDivisions: 0,
       totalTracks: 0,
       totalArtists: 0,
       totalDocuments: 0
     })),
+    enabled: !!adminToken,
   });
 }
 
