@@ -55,6 +55,8 @@ export default function Desktop() {
               name={div.name}
               iconType={div.iconType || 'Folder'}
               windowType={(div.windowType as WindowType) || 'browser'}
+              iconColor={div.iconColor || '#2563EB'}
+              slug={div.slug}
               data={{ url: div.websiteUrl, content: div.notepadContent, division: div }}
             />
           ))

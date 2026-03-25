@@ -4,13 +4,13 @@ import { useState, useRef, useEffect } from 'react';
 
 type LucideIcons = typeof Icons;
 
-function resolveIcon(iconType: string): React.ComponentType<{ className?: string; strokeWidth?: number }> {
+function resolveIcon(iconType: string): React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }> {
   const toPascalCase = (s: string) => s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
   const key = toPascalCase(iconType) as keyof LucideIcons;
   const icon = Icons[key];
-  if (icon && typeof icon === 'function') return icon as React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  if (icon && typeof icon === 'function') return icon as React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }>;
   const fallback = Icons[iconType as keyof LucideIcons];
-  if (fallback && typeof fallback === 'function') return fallback as React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  if (fallback && typeof fallback === 'function') return fallback as React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }>;
   return Icons.Folder;
 }
 
@@ -19,6 +19,8 @@ interface DesktopIconProps {
   name: string;
   iconType: string;
   windowType: WindowType;
+  iconColor?: string;
+  slug?: string;
   data?: Record<string, unknown>;
 }
 
@@ -29,13 +31,142 @@ interface ContextMenuItem {
   separator?: boolean;
 }
 
-export function DesktopIcon({ id, name, iconType, windowType, data }: DesktopIconProps) {
+function IconBadge({ slug, iconType, iconColor }: { slug: string; iconType: string; iconColor: string }) {
+  const IconComponent = resolveIcon(iconType);
+  const bg = iconColor || '#2563EB';
+  const shine = <div className="absolute inset-0 bg-gradient-to-b from-white/25 to-transparent pointer-events-none rounded-2xl" />;
+
+  if (slug === 'my-njayco') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#1D4ED8' }}>
+        {shine}
+        <span className="text-white font-black text-2xl tracking-tight relative z-10">NJ</span>
+      </div>
+    );
+  }
+
+  if (slug === 'uv-empire') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex flex-col items-center justify-center shadow-lg relative overflow-hidden gap-0.5" style={{ background: '#111827' }}>
+        {shine}
+        <span className="text-white font-black text-sm tracking-widest relative z-10">UV</span>
+        <span className="text-white/80 font-semibold relative z-10" style={{ fontSize: '7px', letterSpacing: '0.18em' }}>EMPIRE</span>
+      </div>
+    );
+  }
+
+  if (slug === 'denoko') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#111827' }}>
+        {shine}
+        <span className="text-white font-bold text-xs tracking-wider relative z-10">Denoko</span>
+      </div>
+    );
+  }
+
+  if (slug === 'uv-music-group') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#0F0F0F' }}>
+        {shine}
+        <Icons.Disc3 className="w-8 h-8 relative z-10" style={{ color: '#DC2626' }} strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'wax-radio') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: bg }}>
+        {shine}
+        <Icons.Disc3 className="w-8 h-8 text-white relative z-10" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'phone-msgr') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#22C55E' }}>
+        {shine}
+        <Icons.Phone className="w-8 h-8 text-white relative z-10" strokeWidth={2} />
+      </div>
+    );
+  }
+
+  if (slug === 'greet-me') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#FFFFFF' }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 to-slate-100 pointer-events-none rounded-2xl" />
+        <Icons.Handshake className="w-8 h-8 relative z-10" style={{ color: '#2563EB' }} strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'ysup-inc' || slug === 'ysup-campus') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: bg }}>
+        {shine}
+        <Icons.GraduationCap className="w-8 h-8 text-white relative z-10" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'investor-info') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#FFFFFF' }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 to-slate-100 pointer-events-none rounded-2xl" />
+        <Icons.BarChart2 className="w-8 h-8 relative z-10" style={{ color: '#16A34A' }} strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'contact') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#F3F4F6' }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-white to-slate-100 pointer-events-none rounded-2xl" />
+        <Icons.UserCircle2 className="w-8 h-8 relative z-10" style={{ color: '#374151' }} strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'about-najee') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: bg }}>
+        {shine}
+        <Icons.User className="w-8 h-8 text-white relative z-10" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'njayco-corporate') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: bg }}>
+        {shine}
+        <Icons.Building2 className="w-8 h-8 text-white relative z-10" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  if (slug === 'admin-panel' || slug === '') {
+    return (
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: '#374151' }}>
+        {shine}
+        <Icons.Settings className="w-8 h-8 text-white relative z-10" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: bg }}>
+      {shine}
+      <IconComponent className="w-8 h-8 text-white relative z-10" strokeWidth={1.5} />
+    </div>
+  );
+}
+
+export function DesktopIcon({ id, name, iconType, windowType, iconColor, slug = '', data }: DesktopIconProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const contextRef = useRef<HTMLDivElement>(null);
   const openWindow = useDesktopStore(s => s.openWindow);
-
-  const IconComponent = resolveIcon(iconType);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -75,11 +206,13 @@ export function DesktopIcon({ id, name, iconType, windowType, data }: DesktopIco
     { label: 'Properties', icon: Icons.Info, onClick: () => setContextMenu(null), separator: true },
   ];
 
+  const effectiveSlug = slug || id;
+
   return (
     <>
-      <div 
+      <div
         className={`
-          w-24 flex flex-col items-center justify-start gap-1 p-2 rounded 
+          w-20 flex flex-col items-center justify-start gap-1.5 p-2 rounded-lg
           cursor-pointer transition-all border border-transparent
           ${isFocused ? 'bg-white/20 border-white/30 shadow-sm' : 'hover:bg-white/10 hover:border-white/20'}
         `}
@@ -91,10 +224,8 @@ export function DesktopIcon({ id, name, iconType, windowType, data }: DesktopIco
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
       >
-        <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center shadow-lg border border-white/20">
-          <IconComponent className="w-7 h-7 text-white drop-shadow-md" strokeWidth={1.5} />
-        </div>
-        <span className="text-white text-xs font-semibold text-center leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] line-clamp-2">
+        <IconBadge slug={effectiveSlug} iconType={iconType} iconColor={iconColor || '#2563EB'} />
+        <span className="text-white text-[11px] font-semibold text-center leading-tight drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] line-clamp-2 w-full">
           {name}
         </span>
       </div>
