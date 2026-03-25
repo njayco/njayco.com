@@ -33,6 +33,7 @@ import type {
   GetTracksParams,
   HealthStatus,
   Track,
+  TrackCreate,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -969,6 +970,92 @@ export function useGetTracks<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Create a new track (admin)
+ */
+export const getCreateTrackUrl = () => {
+  return `/api/tracks`;
+};
+
+export const createTrack = async (
+  trackCreate: TrackCreate,
+  options?: RequestInit,
+): Promise<Track> => {
+  return customFetch<Track>(getCreateTrackUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(trackCreate),
+  });
+};
+
+export const getCreateTrackMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTrack>>,
+    TError,
+    { data: BodyType<TrackCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createTrack>>,
+  TError,
+  { data: BodyType<TrackCreate> },
+  TContext
+> => {
+  const mutationKey = ["createTrack"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createTrack>>,
+    { data: BodyType<TrackCreate> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createTrack(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateTrackMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createTrack>>
+>;
+export type CreateTrackMutationBody = BodyType<TrackCreate>;
+export type CreateTrackMutationError = ErrorType<void>;
+
+/**
+ * @summary Create a new track (admin)
+ */
+export const useCreateTrack = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTrack>>,
+    TError,
+    { data: BodyType<TrackCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createTrack>>,
+  TError,
+  { data: BodyType<TrackCreate> },
+  TContext
+> => {
+  return useMutation(getCreateTrackMutationOptions(options));
+};
 
 /**
  * @summary Get all documents

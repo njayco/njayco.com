@@ -1,17 +1,29 @@
 import { Router, type IRouter } from "express";
 import { db, documentsTable } from "@workspace/db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
+
+type DocCategory = "corporate" | "investor" | "press" | "legal" | "division" | "services";
+const VALID_CATEGORIES: ReadonlySet<DocCategory> = new Set([
+  "corporate", "investor", "press", "legal", "division", "services"
+]);
 
 const router: IRouter = Router();
 
 router.get("/documents", async (req, res) => {
   try {
-    const category = req.query.category as string | undefined;
+    const rawCategory = req.query.category as string | undefined;
+    const category = rawCategory && VALID_CATEGORIES.has(rawCategory as DocCategory)
+      ? (rawCategory as DocCategory)
+      : undefined;
+
     const docs = category
-      ? await db.select().from(documentsTable).where(eq(documentsTable.category, category as any))
+      ? await db.select().from(documentsTable).where(
+          and(eq(documentsTable.public, true), eq(documentsTable.category, category))
+        )
       : await db.select().from(documentsTable).where(eq(documentsTable.public, true));
+
     res.json(docs);
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch documents" });
   }
 });
@@ -23,13 +35,14 @@ router.get("/documents/:id", async (req, res) => {
       res.status(400).json({ error: "Invalid ID" });
       return;
     }
-    const [doc] = await db.select().from(documentsTable).where(eq(documentsTable.id, id));
+    const [doc] = await db.select().from(documentsTable)
+      .where(and(eq(documentsTable.id, id), eq(documentsTable.public, true)));
     if (!doc) {
       res.status(404).json({ error: "Document not found" });
       return;
     }
     res.json(doc);
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Failed to fetch document" });
   }
 });

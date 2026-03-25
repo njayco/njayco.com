@@ -1,6 +1,6 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
 import { db, artistsTable, albumsTable, tracksTable } from "@workspace/db";
-import { insertArtistSchema, insertAlbumSchema } from "@workspace/db/schema";
+import { insertArtistSchema, insertAlbumSchema, insertTrackSchema } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 
 const router: IRouter = Router();
@@ -8,7 +8,7 @@ const router: IRouter = Router();
 function requireAdmin(req: Request, res: Response, next: NextFunction): void {
   const token = req.headers["x-admin-token"] as string | undefined;
   const adminToken = process.env.ADMIN_TOKEN;
-  if (adminToken && token !== adminToken) {
+  if (!adminToken || token !== adminToken) {
     res.status(403).json({ error: "Forbidden: admin access required" });
     return;
   }
@@ -151,6 +151,28 @@ router.get("/albums/:id", async (req, res) => {
     });
   } catch (_err) {
     res.status(500).json({ error: "Failed to fetch album" });
+  }
+});
+
+router.post("/tracks", requireAdmin, async (req, res) => {
+  try {
+    const parsed = insertTrackSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: "Validation failed", details: parsed.error.flatten() });
+      return;
+    }
+    const artists = await db.select().from(artistsTable);
+    const albums = await db.select().from(albumsTable);
+    const artistMap = new Map(artists.map(a => [a.id, a.name]));
+    const albumMap = new Map(albums.map(a => [a.id, a.title]));
+    const [created] = await db.insert(tracksTable).values(parsed.data).returning();
+    res.status(201).json({
+      ...created,
+      artistName: artistMap.get(created.artistId) ?? "",
+      albumTitle: albumMap.get(created.albumId) ?? "",
+    });
+  } catch (_err) {
+    res.status(500).json({ error: "Failed to create track" });
   }
 });
 

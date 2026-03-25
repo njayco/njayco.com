@@ -8,7 +8,7 @@ const router: IRouter = Router();
 function requireAdmin(req: Request, res: Response, next: NextFunction): void {
   const token = req.headers["x-admin-token"] as string | undefined;
   const adminToken = process.env.ADMIN_TOKEN;
-  if (adminToken && token !== adminToken) {
+  if (!adminToken || token !== adminToken) {
     res.status(403).json({ error: "Forbidden: admin access required" });
     return;
   }

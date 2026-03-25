@@ -314,6 +314,19 @@ export const GetTracksResponseItem = zod.object({
 export const GetTracksResponse = zod.array(GetTracksResponseItem);
 
 /**
+ * @summary Create a new track (admin)
+ */
+export const CreateTrackBody = zod.object({
+  artistId: zod.number(),
+  albumId: zod.number(),
+  title: zod.string(),
+  duration: zod.number(),
+  trackNumber: zod.number(),
+  previewUrl: zod.string().nullish(),
+  featured: zod.boolean(),
+});
+
+/**
  * @summary Get all documents
  */
 export const GetDocumentsQueryParams = zod.object({

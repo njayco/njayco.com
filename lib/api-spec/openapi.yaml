@@ -224,6 +224,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Track"
+    post:
+      operationId: createTrack
+      tags: [music]
+      summary: Create a new track (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrackCreate"
+      responses:
+        "201":
+          description: Created track
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        "400":
+          description: Validation error
 
   /documents:
     get:
@@ -422,6 +441,32 @@ components:
           type: boolean
       required:
         - id
+
+    TrackCreate:
+      type: object
+      properties:
+        artistId:
+          type: integer
+        albumId:
+          type: integer
+        title:
+          type: string
+        duration:
+          type: integer
+        trackNumber:
+          type: integer
+        previewUrl:
+          type: string
+          nullable: true
+        featured:
+          type: boolean
+      required:
+        - artistId
+        - albumId
+        - title
+        - duration
+        - trackNumber
+        - featured
 
     ArtistCreate:
       type: object

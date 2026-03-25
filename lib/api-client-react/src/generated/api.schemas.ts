@@ -119,6 +119,16 @@ export interface DivisionUpdate {
   featured?: boolean;
 }
 
+export interface TrackCreate {
+  artistId: number;
+  albumId: number;
+  title: string;
+  duration: number;
+  trackNumber: number;
+  previewUrl?: string | null;
+  featured: boolean;
+}
+
 export interface ArtistCreate {
   slug: string;
   name: string;

@@ -32,3 +32,4 @@ export * from "./getDocumentsParams";
 export * from "./getTracksParams";
 export * from "./healthStatus";
 export * from "./track";
+export * from "./trackCreate";

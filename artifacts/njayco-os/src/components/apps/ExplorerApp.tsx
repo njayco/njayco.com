@@ -1,7 +1,22 @@
 import { useState } from 'react';
 import * as Icons from 'lucide-react';
-import { useDesktopStore } from '@/store/use-desktop-store';
+import { useDesktopStore, type WindowType } from '@/store/use-desktop-store';
 import { useGetDivisions, useGetDocuments } from '@/hooks/use-music-hooks';
+
+type LucideIcons = typeof Icons;
+function getIcon(name: string): React.ComponentType<React.SVGProps<SVGSVGElement>> {
+  const toPascalCase = (s: string) => s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+  const key = toPascalCase(name) as keyof LucideIcons;
+  const icon = Icons[key];
+  if (icon && typeof icon === 'function') return icon as React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  return Icons.Folder;
+}
+
+const VALID_WINDOW_TYPES = new Set<WindowType>(['browser', 'notepad', 'music', 'explorer', 'admin', 'custom', 'company']);
+function toWindowType(raw: string | null | undefined): WindowType {
+  if (raw && VALID_WINDOW_TYPES.has(raw as WindowType)) return raw as WindowType;
+  return 'browser';
+}
 
 export function ExplorerApp() {
   const { openWindow } = useDesktopStore();
@@ -15,8 +30,6 @@ export function ExplorerApp() {
     { name: 'Documents', icon: Icons.FileText, section: 'documents' as const, desc: 'Company docs and records' },
     { name: 'Media Library', icon: Icons.Image, section: 'media' as const, desc: 'Photos, videos, and assets' },
   ];
-
-  const toPascalCase = (s: string) => s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
 
   return (
     <div className="flex flex-col h-full bg-slate-50 text-slate-800 text-sm">
@@ -42,9 +55,12 @@ export function ExplorerApp() {
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar Tree */}
         <div className="w-56 bg-white border-r border-slate-300 overflow-y-auto hidden md:flex flex-col p-2 gap-1">
+          <div className="flex items-center gap-2 py-1.5 px-2 text-slate-400 text-xs font-bold uppercase tracking-wider">
+            <Icons.HardDrive className="w-3.5 h-3.5" /> NJAYCO (C:)
+          </div>
           <div 
             onClick={() => { setSection('root'); setPath('My NJAYCO'); }}
-            className={`flex items-center gap-2 py-1.5 px-2 cursor-pointer rounded ${section === 'root' ? 'bg-blue-100 text-blue-800' : 'hover:bg-blue-50'}`}
+            className={`flex items-center gap-2 py-1.5 px-2 cursor-pointer rounded ml-2 ${section === 'root' ? 'bg-blue-100 text-blue-800' : 'hover:bg-blue-50'}`}
           >
             <Icons.Monitor className="w-4 h-4 text-blue-500 shrink-0" />
             <span className="text-sm font-semibold">My NJAYCO</span>
@@ -53,7 +69,7 @@ export function ExplorerApp() {
             <div 
               key={f.name}
               onClick={() => { setSection(f.section); setPath(f.name); }}
-              className={`flex items-center gap-2 py-1.5 px-2 cursor-pointer rounded ml-3 ${section === f.section ? 'bg-blue-100 text-blue-800' : 'hover:bg-blue-50'}`}
+              className={`flex items-center gap-2 py-1.5 px-2 cursor-pointer rounded ml-5 ${section === f.section ? 'bg-blue-100 text-blue-800' : 'hover:bg-blue-50'}`}
             >
               <f.icon className="w-4 h-4 text-yellow-500 shrink-0" />
               <span className="text-sm">{f.name}</span>
@@ -85,19 +101,18 @@ export function ExplorerApp() {
           {section === 'divisions' && (
             <>
               <div className="text-xs font-bold text-blue-900 border-b border-blue-200 pb-2 mb-4 uppercase tracking-wider">
-                {divisions?.length || 0} Divisions
+                {divisions?.length ?? 0} Divisions
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {divisions?.map(div => {
-                  const iconKey = toPascalCase(div.iconType || 'folder');
-                  const DivIcon = (Icons as any)[iconKey] || Icons.Folder;
+                  const DivIcon = getIcon(div.iconType || 'folder');
                   return (
                     <div
                       key={div.id}
                       onDoubleClick={() => openWindow({
                         id: `div-${div.id}`,
                         title: div.name,
-                        windowType: (div.windowType as any) || 'browser',
+                        windowType: toWindowType(div.windowType),
                         data: { url: div.websiteUrl, content: div.notepadContent, division: div }
                       })}
                       className="flex flex-col items-center gap-2 p-3 hover:bg-blue-50 cursor-pointer rounded border border-transparent hover:border-blue-200 transition-colors"
@@ -119,7 +134,7 @@ export function ExplorerApp() {
           {section === 'documents' && (
             <>
               <div className="text-xs font-bold text-blue-900 border-b border-blue-200 pb-2 mb-4 uppercase tracking-wider">
-                {documents?.length || 0} Documents
+                {documents?.length ?? 0} Documents
               </div>
               {documents && documents.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -170,7 +185,7 @@ export function ExplorerApp() {
           {section === 'divisions' && (
             <div className="bg-white rounded-lg border border-slate-200 p-3">
               <div className="text-xs text-slate-500">Total</div>
-              <div className="text-sm font-medium text-slate-800">{divisions?.length || 0} divisions</div>
+              <div className="text-sm font-medium text-slate-800">{divisions?.length ?? 0} divisions</div>
             </div>
           )}
         </div>
@@ -180,8 +195,8 @@ export function ExplorerApp() {
       <div className="h-6 bg-slate-200 border-t border-slate-300 flex items-center px-4 text-xs text-slate-600 justify-between">
         <span>
           {section === 'root' && `${rootFolders.length} folders`}
-          {section === 'divisions' && `${divisions?.length || 0} objects`}
-          {section === 'documents' && `${documents?.length || 0} files`}
+          {section === 'divisions' && `${divisions?.length ?? 0} objects`}
+          {section === 'documents' && `${documents?.length ?? 0} files`}
           {section === 'media' && 'Media Library'}
         </span>
         <span>NJAYCO (C:) · Connected</span>
