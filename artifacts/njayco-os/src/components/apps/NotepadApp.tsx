@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useDesktopStore } from '@/store/use-desktop-store';
+import { useDesktopStore, type WindowData } from '@/store/use-desktop-store';
 
-export function NotepadApp({ data }: { data?: { content?: string } }) {
+export function NotepadApp({ data }: { data?: WindowData }) {
   const user = useDesktopStore(s => s.user);
   const isReadOnly = user === 'guest';
   const [content, setContent] = useState(data?.content || 'New Document\n\n...');

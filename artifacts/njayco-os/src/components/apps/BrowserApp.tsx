@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import * as Icons from 'lucide-react';
 
-export function BrowserApp({ data }: { data?: { url?: string } }) {
-  const defaultUrl = data?.url || 'https://njayco.com';
+import type { WindowData } from '@/store/use-desktop-store';
+
+export function BrowserApp({ data }: { data?: WindowData }) {
+  const defaultUrl = data?.url ?? 'https://njayco.com';
   const [url, setUrl] = useState(defaultUrl);
   const [inputUrl, setInputUrl] = useState(defaultUrl);
 

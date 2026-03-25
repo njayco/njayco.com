@@ -3,11 +3,28 @@ import { persist } from 'zustand/middleware';
 
 export type WindowType = 'browser' | 'notepad' | 'music' | 'explorer' | 'admin' | 'custom' | 'company';
 
+/** Typed payload for each window variant. All fields are optional/nullable. */
+export interface WindowData {
+  url?: string | null;
+  content?: string | null;
+  division?: {
+    id?: number;
+    name?: string;
+    shortDescription?: string;
+    fullDescription?: string;
+    websiteUrl?: string | null;
+    iconType?: string;
+    windowType?: string;
+    status?: string;
+    category?: string;
+  };
+}
+
 export interface WindowState {
   id: string;
   title: string;
   windowType: WindowType;
-  data?: any;
+  data?: WindowData;
   isMinimized: boolean;
   isMaximized: boolean;
   zIndex: number;

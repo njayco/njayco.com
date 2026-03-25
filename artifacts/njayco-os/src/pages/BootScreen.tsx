@@ -2,16 +2,20 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useDesktopStore } from '@/store/use-desktop-store';
 
-export default function BootScreen() {
+interface BootScreenProps {
+  onDone?: () => void;
+}
+
+export default function BootScreen({ onDone }: BootScreenProps) {
   const setVisited = useDesktopStore(s => s.setVisited);
 
   useEffect(() => {
-    // Automatically progress after boot sequence
     const timer = setTimeout(() => {
       setVisited(true);
+      onDone?.();
     }, 4500);
     return () => clearTimeout(timer);
-  }, [setVisited]);
+  }, [setVisited, onDone]);
 
   return (
     <div className="h-screen w-screen bg-black flex flex-col items-center justify-center overflow-hidden cursor-none">

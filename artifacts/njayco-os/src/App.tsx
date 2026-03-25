@@ -6,6 +6,7 @@ import { useDesktopStore } from "./store/use-desktop-store";
 import BootScreen from "./pages/BootScreen";
 import LoginScreen from "./pages/LoginScreen";
 import Desktop from "./pages/Desktop";
+import { useState } from "react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,8 +19,16 @@ const queryClient = new QueryClient({
 
 function OSManager() {
   const { visited, user, alwaysShowStartup } = useDesktopStore();
+  // Session-level flag: tracks whether boot was already shown this page load.
+  // When alwaysShowStartup is on, we show boot on every page load, but only once
+  // per session — BootScreen sets this to true when it finishes.
+  const [bootDoneThisSession, setBootDoneThisSession] = useState(false);
   
-  if (!visited || alwaysShowStartup) return <BootScreen />;
+  const shouldShowBoot = !visited || (alwaysShowStartup && !bootDoneThisSession);
+  
+  if (shouldShowBoot) {
+    return <BootScreen onDone={() => setBootDoneThisSession(true)} />;
+  }
   if (!user) return <LoginScreen />;
   return <Desktop />;
 }

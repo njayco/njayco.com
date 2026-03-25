@@ -1,13 +1,9 @@
 import * as Icons from 'lucide-react';
+import type { WindowData } from '@/store/use-desktop-store';
 
-interface Division {
-  name: string;
-  shortDescription?: string;
-  fullDescription?: string;
-  websiteUrl?: string;
-}
+type Division = NonNullable<WindowData['division']>;
 
-export function CompanyInfoApp({ data }: { data?: { division?: Division, url?: string } }) {
+export function CompanyInfoApp({ data }: { data?: WindowData }) {
   const division = data?.division;
   
   if (division?.name === 'About Najee Jeremiah') {
