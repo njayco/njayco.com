@@ -77,14 +77,15 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
       </div>
 
       {showAllPrograms ? (
-        <div className="flex-1 flex flex-col bg-white" style={{ height: 'min(420px, calc(100vh - 200px))' }}>
-          <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border-b border-blue-100">
+        <div className="flex flex-col bg-white" style={{ height: '420px', minHeight: '200px' }}>
+          <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border-b border-blue-100 shrink-0">
             <button onClick={() => setShowAllPrograms(false)} className="p-1 hover:bg-blue-100 rounded">
               <Icons.ArrowLeft className="w-4 h-4 text-blue-600" />
             </button>
             <span className="text-sm font-bold text-blue-900">All Programs</span>
+            {divisions && <span className="text-xs text-gray-400 ml-auto">{allPrograms.filter(a => !a.adminOnly || user === 'admin').length + divisions.length} items</span>}
           </div>
-          <div className="flex-1 overflow-y-auto flex flex-col">
+          <div className="overflow-y-auto" style={{ flex: '1 1 0', minHeight: 0 }}>
             <div className="p-2 border-b border-gray-100">
               <div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-2 py-1">Applications</div>
               {allPrograms.filter(app => !app.adminOnly || user === 'admin').map(app => (
@@ -95,10 +96,13 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
                 </button>
               ))}
             </div>
-            {divisions && divisions.length > 0 && (
-              <div className="p-2">
-                <div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-2 py-1">Divisions</div>
-                {divisions.map(div => (
+            <div className="p-2">
+              <div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-2 py-1">
+                NJAYCO Divisions
+                {!divisions && <span className="ml-2 normal-case text-gray-300">Loading...</span>}
+              </div>
+              {divisions && divisions.length > 0 ? (
+                divisions.map(div => (
                   <button key={div.id} onClick={() => { openWindow({ id: `div-${div.id}`, title: div.name, windowType: (div.windowType as WindowType) || 'custom', data: { url: div.websiteUrl, content: div.notepadContent, division: div } }); setStartMenuOpen(false); }}
                     className="flex items-center gap-3 p-2 w-full hover:bg-primary hover:text-white rounded transition-colors group text-left">
                     <Icons.Building2 className="w-4 h-4 text-primary group-hover:text-white shrink-0" />
@@ -107,9 +111,15 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
                       <div className="text-[10px] text-gray-400 group-hover:text-white/70 capitalize">{div.category}</div>
                     </div>
                   </button>
-                ))}
-              </div>
-            )}
+                ))
+              ) : divisions ? (
+                <p className="text-xs text-gray-400 px-2 py-2 italic">No divisions found.</p>
+              ) : (
+                <div className="flex items-center gap-2 px-2 py-3 text-xs text-gray-400">
+                  <Icons.Loader2 className="w-3 h-3 animate-spin" /> Loading divisions...
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (
