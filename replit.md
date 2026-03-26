@@ -54,8 +54,9 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 
 ### Core Features
 - **Boot Screen**: Animated boot sequence with loading bar, auto-progresses to login
-- **Login Screen**: XP-style with 3 user roles (Administrator, Log In, New Guest), user stored in localStorage
+- **Login Screen**: XP-style with 3 user roles (Administrator, Log In, New Guest), responsive (stacks vertically on mobile, hides sidebars)
 - **Desktop**: Wallpaper (futuristic XP-style), draggable/resizable windows via react-rnd, desktop icons from database divisions
+- **Pocket OS (Mobile)**: Below 768px breakpoint, replaces desktop with touch-friendly mobile experience — 3-column icon grid, single-tap to open, fullscreen window panels (one at a time), simplified taskbar, fullscreen start menu overlay
 - **Taskbar**: XP-style with N Start button, open window items, clock, system tray icons
 - **Start Menu**: Pinned apps, file shortcuts, Log Off / Shut Down dialog
 - **Window Types**: `browser` (iframe), `notepad` (text editor), `music` (iTunes-style), `explorer` (file manager), `admin` (dashboard), `company`/`custom` (company info pages)
@@ -65,7 +66,8 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 React + Vite at previewPath `/` (port from `$PORT`). Key files:
 - `src/pages/BootScreen.tsx`, `LoginScreen.tsx`, `Desktop.tsx`
 - `src/store/use-desktop-store.ts` — Zustand store
-- `src/components/desktop/` — Taskbar, StartMenu, WindowWrapper, DesktopIcon
+- `src/components/desktop/` — Taskbar, StartMenu, WindowWrapper, DesktopIcon (exports `IconBadge`)
+- `src/components/mobile/` — MobileDesktop, MobileWindowPanel, MobileTaskbar, MobileStartMenu
 - `src/components/apps/` — BrowserApp, NotepadApp, MusicApp, ExplorerApp, AdminApp, CompanyInfoApp
 - `src/hooks/use-music-hooks.ts` — React Query wrappers
 

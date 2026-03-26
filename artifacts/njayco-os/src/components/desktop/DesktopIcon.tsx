@@ -31,7 +31,7 @@ interface ContextMenuItem {
   separator?: boolean;
 }
 
-function IconBadge({ slug, iconType, iconColor }: { slug: string; iconType: string; iconColor: string }) {
+export function IconBadge({ slug, iconType, iconColor }: { slug: string; iconType: string; iconColor: string }) {
   const IconComponent = resolveIcon(iconType);
   const bg = iconColor || '#2563EB';
   const shine = <div className="absolute inset-0 bg-gradient-to-b from-white/25 to-transparent pointer-events-none rounded-2xl" />;

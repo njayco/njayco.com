@@ -95,10 +95,17 @@ export const useDesktopStore = create<DesktopStore>()(
         }));
       },
 
-      closeWindow: (id) => set(s => ({
-        windows: s.windows.filter(w => w.id !== id),
-        activeWindowId: s.activeWindowId === id ? null : s.activeWindowId
-      })),
+      closeWindow: (id) => set(s => {
+        const remaining = s.windows.filter(w => w.id !== id);
+        let nextActive = s.activeWindowId;
+        if (s.activeWindowId === id) {
+          const topWindow = remaining
+            .filter(w => !w.isMinimized)
+            .sort((a, b) => b.zIndex - a.zIndex)[0];
+          nextActive = topWindow?.id ?? null;
+        }
+        return { windows: remaining, activeWindowId: nextActive };
+      }),
 
       minimizeWindow: (id) => set(s => ({
         windows: s.windows.map(w => w.id === id ? { ...w, isMinimized: true } : w),
