@@ -36,7 +36,7 @@ interface StartMenuProps {
 }
 
 export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
-  const { user, setUser, setStartMenuOpen, openWindow, closeAllWindows } = useDesktopStore();
+  const { user, clearAuth, authToken, setStartMenuOpen, openWindow, closeAllWindows } = useDesktopStore();
   const { data: divisions } = useGetDivisions();
   const [showAllPrograms, setShowAllPrograms] = useState(false);
 
@@ -51,8 +51,14 @@ export function StartMenu({ onShowRun, onShowShutdown }: StartMenuProps) {
   };
 
   const handleLogoff = () => {
+    if (authToken) {
+      fetch(`${import.meta.env.BASE_URL}api/auth/logout`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${authToken}` },
+      }).catch(() => {});
+    }
     closeAllWindows();
-    setUser(null);
+    clearAuth();
     setStartMenuOpen(false);
   };
 
@@ -300,17 +306,28 @@ interface ShutdownDialogProps {
 }
 
 export function ShutdownDialog({ open, onClose }: ShutdownDialogProps) {
-  const { setUser, setVisited, closeAllWindows } = useDesktopStore();
+  const { clearAuth, authToken, setVisited, closeAllWindows } = useDesktopStore();
+
+  const doLogout = () => {
+    if (authToken) {
+      fetch(`${import.meta.env.BASE_URL}api/auth/logout`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${authToken}` },
+      }).catch(() => {});
+    }
+  };
 
   const handleLogoff = () => {
+    doLogout();
     closeAllWindows();
-    setUser(null);
+    clearAuth();
     onClose();
   };
 
   const handleShutdown = () => {
+    doLogout();
     closeAllWindows();
-    setUser(null);
+    clearAuth();
     setVisited(false);
     window.location.reload();
   };

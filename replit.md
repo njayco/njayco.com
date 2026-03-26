@@ -54,13 +54,14 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 
 ### Core Features
 - **Boot Screen**: Animated boot sequence with loading bar, auto-progresses to login
-- **Login Screen**: XP-style with 3 user roles (Administrator, Log In, New Guest), responsive (stacks vertically on mobile, hides sidebars)
+- **Login Screen**: XP-style with 4 user cards (Administrator, Log In, Sign Up, New Guest). Administrator and Log In show credential forms, Sign Up shows registration form with user type selection, Guest is immediate access. Responsive (stacks vertically on mobile, hides sidebars).
+- **Authentication**: Server-side auth with bcrypt password hashing, session tokens stored in DB. Admin login checks against `ADMIN_PASSWORD` env var with hardcoded username "njayco". User sessions persist across page reloads via localStorage token + `/api/auth/me` validation on app load
 - **Desktop**: Wallpaper (futuristic XP-style), draggable/resizable windows via react-rnd, desktop icons from database divisions
 - **Pocket OS (Mobile)**: Below 768px breakpoint, replaces desktop with touch-friendly mobile experience — 3-column icon grid, single-tap to open, fullscreen window panels (one at a time), simplified taskbar, fullscreen start menu overlay
 - **Taskbar**: XP-style with N Start button, open window items, clock, system tray icons
 - **Start Menu**: Pinned apps, file shortcuts, Log Off / Shut Down dialog
 - **Window Types**: `browser` (iframe), `notepad` (text editor), `music` (iTunes-style), `explorer` (file manager), `admin` (dashboard), `company`/`custom` (company info pages)
-- **State**: Zustand store (`njayco-os-storage`) persists `visited` and `user` in localStorage
+- **State**: Zustand store (`njayco-os-storage`) persists `visited`, `user`, `authToken`, and `authUser` in localStorage
 
 ### Frontend: `artifacts/njayco-os` (`@workspace/njayco-os`)
 React + Vite at previewPath `/` (port from `$PORT`). Key files:
@@ -77,9 +78,14 @@ React + Vite at previewPath `/` (port from `$PORT`). Key files:
 - `GET /api/documents`
 - `GET /api/admin/stats`
 - `PUT /api/divisions/:id`
+- `POST /api/auth/signup` — Create account (username, email, password, confirmPassword, userType)
+- `POST /api/auth/login` — User login (username, password)
+- `POST /api/auth/admin-login` — Admin login (username "njayco", password from ADMIN_PASSWORD env)
+- `GET /api/auth/me` — Restore session from Bearer token
+- `POST /api/auth/logout` — Invalidate session token
 
 ### Database (PostgreSQL + Drizzle)
-- Tables: `divisions`, `artists`, `albums`, `tracks`, `documents`
+- Tables: `divisions`, `artists`, `albums`, `tracks`, `documents`, `users`, `sessions`
 - Seed: `pnpm --filter @workspace/scripts run seed-njayco`
 - 21 divisions seeded covering all NJAYCO brands
 

@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware';
 
 export type WindowType = 'browser' | 'notepad' | 'music' | 'explorer' | 'admin' | 'custom' | 'company';
 
-/** Typed payload for each window variant. All fields are optional/nullable. */
 export interface WindowData {
   url?: string | null;
   content?: string | null;
@@ -30,9 +29,19 @@ export interface WindowState {
   zIndex: number;
 }
 
+export interface AuthUser {
+  id: number;
+  username: string;
+  email: string;
+  userType: string;
+  role: string;
+}
+
 interface DesktopStore {
   visited: boolean;
   user: 'admin' | 'user' | 'guest' | null;
+  authToken: string | null;
+  authUser: AuthUser | null;
   alwaysShowStartup: boolean;
   windows: WindowState[];
   nextZIndex: number;
@@ -41,6 +50,8 @@ interface DesktopStore {
   
   setVisited: (v: boolean) => void;
   setUser: (u: 'admin' | 'user' | 'guest' | null) => void;
+  setAuth: (token: string, user: AuthUser, role: 'admin' | 'user' | 'guest') => void;
+  clearAuth: () => void;
   setAlwaysShowStartup: (v: boolean) => void;
   setStartMenuOpen: (v: boolean) => void;
   
@@ -57,6 +68,8 @@ export const useDesktopStore = create<DesktopStore>()(
     (set, get) => ({
       visited: false,
       user: null,
+      authToken: null,
+      authUser: null,
       alwaysShowStartup: false,
       windows: [],
       nextZIndex: 10,
@@ -65,6 +78,8 @@ export const useDesktopStore = create<DesktopStore>()(
 
       setVisited: (visited) => set({ visited }),
       setUser: (user) => set({ user }),
+      setAuth: (authToken, authUser, role) => set({ authToken, authUser, user: role }),
+      clearAuth: () => set({ authToken: null, authUser: null, user: null, windows: [], activeWindowId: null }),
       setAlwaysShowStartup: (alwaysShowStartup) => set({ alwaysShowStartup }),
       setStartMenuOpen: (startMenuOpen) => set({ startMenuOpen }),
 
@@ -143,6 +158,8 @@ export const useDesktopStore = create<DesktopStore>()(
       partialize: (state) => ({
         visited: state.visited,
         user: state.user,
+        authToken: state.authToken,
+        authUser: state.authUser,
         alwaysShowStartup: state.alwaysShowStartup
       })
     }

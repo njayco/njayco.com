@@ -7,7 +7,7 @@ interface MobileStartMenuProps {
 }
 
 export function MobileStartMenu({ onClose }: MobileStartMenuProps) {
-  const { user, setUser, setVisited, openWindow, closeAllWindows, setStartMenuOpen } = useDesktopStore();
+  const { user, clearAuth, authToken, setVisited, openWindow, closeAllWindows, setStartMenuOpen } = useDesktopStore();
   const { data: divisions } = useGetDivisions();
 
   const handleOpenApp = (id: string, title: string, windowType: WindowType, data?: Record<string, unknown>) => {
@@ -17,16 +17,27 @@ export function MobileStartMenu({ onClose }: MobileStartMenuProps) {
     onClose();
   };
 
+  const doLogout = () => {
+    if (authToken) {
+      fetch(`${import.meta.env.BASE_URL}api/auth/logout`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${authToken}` },
+      }).catch(() => {});
+    }
+  };
+
   const handleLogoff = () => {
+    doLogout();
     closeAllWindows();
-    setUser(null);
+    clearAuth();
     setStartMenuOpen(false);
     onClose();
   };
 
   const handleShutdown = () => {
+    doLogout();
     closeAllWindows();
-    setUser(null);
+    clearAuth();
     setVisited(false);
     onClose();
     window.location.reload();
